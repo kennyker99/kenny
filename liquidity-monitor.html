@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Liquidity Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e8e8e8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.5;overflow-x:hidden}
+:root{--o:#ff9500;--g:#00d084;--y:#ffd700;--r:#9e3840;--t:#68908b;--c1:#d9b300}
+
+/* HEADER */
+.hdr{background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.hdl{display:flex;align-items:center;gap:10px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ht{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--o);letter-spacing:.06em}
+.hs{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#555;letter-spacing:.07em}
+.hdr-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.upd-txt{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#404040}
+.auto-pill{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#2a6a4a;background:rgba(0,208,132,.08);border:1px solid rgba(0,208,132,.2);padding:3px 8px;border-radius:20px;display:none}
+.auto-pill.on{display:inline-block}
+.hbtn{background:transparent;border:1px solid #2a2a2a;color:#777;padding:6px 12px;border-radius:4px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;transition:all .2s;white-space:nowrap}
+.hbtn:hover{border-color:#484848;color:#bbb}
+.hbtn:disabled{opacity:.35;cursor:not-allowed}
+.hbtn.active{border-color:rgba(0,208,132,.4);color:var(--g)}
+
+/* SETTINGS DRAWER */
+.drawer{background:#0e0e0e;border-bottom:1px solid #1a1a1a;padding:0 24px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.drawer.open{max-height:200px;padding:16px 24px}
+.drawer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.drawer-item{display:flex;flex-direction:column;gap:6px}
+.drawer-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#606060;letter-spacing:.07em}
+.drawer-select,.drawer-input{background:#0a0a0a;border:1px solid #252525;color:#c0c0c0;padding:6px 10px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;width:100%}
+.drawer-select:focus,.drawer-input:focus{outline:none;border-color:#404040}
+
+/* MAIN */
+.container{max-width:1400px;margin:0 auto;padding:24px}
+.alert-bar{background:rgba(158,56,64,.12);border:1px solid rgba(158,56,64,.3);border-radius:4px;padding:10px 14px;margin-bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#c06060;display:none}
+.alert-bar.warn{display:flex;align-items:center;gap:8px}
+
+/* GROUP */
+.ghdr{display:flex;align-items:center;gap:8px;border-bottom:1px solid #1a1a1a;padding-bottom:6px;margin-bottom:10px;margin-top:22px}
+.ghdr:first-of-type{margin-top:0}
+.ga{width:3px;height:13px;border-radius:2px}
+.ga.o{background:var(--o)}.ga.g{background:var(--g)}.ga.y{background:var(--y)}
+.gtxt{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.15em;flex:1}
+.gor .gtxt{color:var(--o)}.ggr .gtxt{color:var(--g)}.gyl .gtxt{color:var(--y)}
+.gcnt{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#404040}
+
+/* GRID & CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-bottom:4px}
+.card{position:relative;border:1px solid rgba(104,144,123,.28);background:rgba(104,144,123,.04);padding:10px 10px 10px 14px;border-radius:4px;cursor:pointer;transition:border-color .15s,background .15s}
+.card:hover{border-color:rgba(255,149,0,.45);background:rgba(255,149,0,.04)}
+.card.cau{border-color:rgba(217,179,0,.38);background:rgba(217,179,0,.04)}
+.card.war{border-color:rgba(158,56,64,.45);background:rgba(158,56,64,.06)}
+.card.war .ctitle{color:#e0a0a0}
+.cbar{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:4px 0 0 4px}
+.cbar.n{background:var(--t)}.cbar.c{background:var(--c1)}.cbar.w{background:var(--r)}
+.ctop{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.ctitle{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#c0c0c0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;margin-left:5px}
+.badge.n{background:rgba(104,144,123,.12);color:#78c878}
+.badge.c{background:rgba(217,179,0,.12);color:var(--c1)}
+.badge.w{background:rgba(158,56,64,.15);color:#c06060}
+.cval{display:flex;align-items:baseline;gap:5px;margin-bottom:2px}
+.vnum{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:700;line-height:1}
+.vnum.n{color:#ebebeb}.vnum.c{color:var(--c1)}.vnum.w{color:#c06060}
+.vunit{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;color:#484848}
+.cchg{display:flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;margin-bottom:2px}
+.up{color:var(--r)}.dn{color:var(--t)}.nc{color:#444}
+.cdate{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#383838}
+.skel{background:#181818;border-radius:3px;height:22px;width:60px;animation:sk 1.5s infinite}
+@keyframes sk{0%,100%{opacity:.3}50%{opacity:.6}}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.overlay.on{display:flex}
+.mdl{background:#0e0e0e;border:1px solid rgba(104,144,123,.28);border-radius:6px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.mdl.c{border-color:rgba(217,179,0,.35)}.mdl.w{border-color:rgba(158,56,64,.4)}
+.mbar{height:3px;background:var(--t);border-radius:6px 6px 0 0}
+.mdl.c .mbar{background:var(--c1)}.mdl.w .mbar{background:var(--r)}
+.mhdr{border-bottom:1px solid #1a1a1a;padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start}
+.mlbl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#505050;letter-spacing:.09em;margin-bottom:3px}
+.mttl{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;color:#e8e8e8}
+.mcl{background:none;border:none;color:#555;cursor:pointer;font-size:18px;padding:4px;transition:color .2s}
+.mcl:hover{color:#aaa}
+.mbdy{padding:20px}
+.mval{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.mnum{font-family:'IBM Plex Mono',monospace;font-size:42px;font-weight:700;line-height:1}
+.mnum.n{color:#ebebeb}.mnum.c{color:var(--c1)}.mnum.w{color:#c06060}
+.munit{font-family:'IBM Plex Mono',monospace;font-size:16px;color:#606060;font-weight:700}
+.msrc{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#383838;margin-top:4px}
+.mdiv{border-top:1px solid #161616;margin:14px 0}
+.mbox{border:1px solid rgba(104,144,123,.28);background:rgba(104,144,123,.04);padding:12px;border-radius:4px;margin-bottom:14px}
+.mbox.c{border-color:rgba(217,179,0,.35);background:rgba(217,179,0,.04)}
+.mbox.w{border-color:rgba(158,56,64,.4);background:rgba(158,56,64,.05)}
+.msl{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.msd{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.msd.n{background:var(--t)}.msd.c{background:var(--c1)}.msd.w{background:var(--r)}
+.mst{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.09em}
+.mst.n{color:#78c878}.mst.c{color:var(--c1)}.mst.w{color:#c06060}
+.mds{font-size:13px;color:#888;line-height:1.65;font-family:sans-serif}
+
+/* CHART */
+.chart-section{margin-top:4px}
+.chart-tabs{display:flex;gap:6px;margin-bottom:10px}
+.ctab{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 10px;border-radius:3px;cursor:pointer;border:1px solid #222;color:#606060;background:transparent;transition:all .15s}
+.ctab.active,.ctab:hover{border-color:#404040;color:#c0c0c0;background:#151515}
+.chart-wrap{position:relative;height:160px;background:#080808;border:1px solid #1a1a1a;border-radius:4px;padding:12px}
+.chart-loading{display:flex;align-items:center;justify-content:center;height:100%;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#404040}
+.mfooter{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#383838;margin-top:14px}
+
+/* THRESHOLD BADGE */
+.thresh-note{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#505050;margin-top:2px}
+
+/* ALERTS PANEL */
+.alerts-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.alert-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px}
+.alert-item.warn{background:rgba(158,56,64,.1);border:1px solid rgba(158,56,64,.3);color:#c06060}
+.alert-item.caut{background:rgba(217,179,0,.08);border:1px solid rgba(217,179,0,.25);color:var(--c1)}
+
+@media(max-width:768px){
+  .hdr{flex-direction:column;align-items:flex-start;gap:10px}
+  .hdr-r{width:100%}
+  .grid{grid-template-columns:1fr 1fr}
+  .container{padding:14px}
+  .mnum{font-size:32px}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .ht{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdl">
+    <div class="dot"></div>
+    <div>
+      <div class="ht">GLOBAL LIQUIDITY MONITOR</div>
+      <div class="hs">REAL-TIME US LIQUIDITY DASHBOARD</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="upd-txt" id="upd">--</div>
+    <span class="auto-pill" id="autoPill">● AUTO</span>
+    <button class="hbtn" id="autoBtn" onclick="toggleAuto()">定时刷新</button>
+    <button class="hbtn" id="settBtn" onclick="toggleDrawer()">设置</button>
+    <button class="hbtn" id="rbtn" onclick="loadAll()">↺ 刷新</button>
+  </div>
+</div>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-grid">
+    <div class="drawer-item">
+      <div class="drawer-label">自动刷新间隔</div>
+      <select class="drawer-select" id="intervalSel" onchange="setInterval_()">
+        <option value="0">关闭</option>
+        <option value="5">5 分钟</option>
+        <option value="15" selected>15 分钟</option>
+        <option value="30">30 分钟</option>
+        <option value="60">60 分钟</option>
+      </select>
+    </div>
+    <div class="drawer-item">
+      <div class="drawer-label">T10Y2Y 警告阈值（%）</div>
+      <input class="drawer-input" type="number" id="threshT10" value="0.5" step="0.1" placeholder="CAUTION 阈值">
+    </div>
+    <div class="drawer-item">
+      <div class="drawer-label">贴现窗口警告阈值（百万）</div>
+      <input class="drawer-input" type="number" id="threshDW" value="10000" step="1000">
+    </div>
+    <div class="drawer-item">
+      <div class="drawer-label">历史图表默认周期</div>
+      <select class="drawer-select" id="chartPeriod">
+        <option value="30">30 天</option>
+        <option value="90" selected>90 天</option>
+        <option value="180">180 天</option>
+        <option value="365">1 年</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="alerts-list" id="alertsList"></div>
+
+  <div class="ghdr gor"><div class="ga o"></div><div class="gtxt">MONEY MARKET</div><div class="gcnt">5</div></div>
+  <div class="grid" id="gm"></div>
+
+  <div class="ghdr ggr"><div class="ga g"></div><div class="gtxt">LIQUIDITY</div><div class="gcnt">4</div></div>
+  <div class="grid" id="gl"></div>
+
+  <div class="ghdr gyl"><div class="ga y"></div><div class="gtxt">GOLD FUTURES</div><div class="gcnt">4</div></div>
+  <div class="grid" id="gg"></div>
+
+  <div class="ghdr gor"><div class="ga o"></div><div class="gtxt">SILVER FUTURES</div><div class="gcnt">4</div></div>
+  <div class="grid" id="gs"></div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="ov" onclick="if(event.target===this)closeMdl()">
+  <div class="mdl" id="mdl">
+    <div class="mbar"></div>
+    <div class="mhdr">
+      <div><div class="mlbl" id="mlbl"></div><div class="mttl" id="mttl"></div></div>
+      <button class="mcl" onclick="closeMdl()">✕</button>
+    </div>
+    <div class="mbdy">
+      <div class="mval"><span class="mnum n" id="mnum"></span><span class="munit" id="munit"></span></div>
+      <div class="cchg"><span id="mdir"></span><span id="mchg"></span></div>
+      <div class="msrc" id="msrc"></div>
+      <div class="mdiv"></div>
+      <div class="mbox" id="mbox">
+        <div class="msl"><div class="msd n" id="msd"></div><div class="mst n" id="mst"></div></div>
+        <div class="mds" id="mds"></div>
+      </div>
+      <div class="chart-section" id="chartSection" style="display:none">
+        <div class="chart-tabs" id="chartTabs"></div>
+        <div class="chart-wrap"><div class="chart-loading" id="chartLoading">加载图表...</div><canvas id="chartCanvas" style="display:none"></canvas></div>
+      </div>
+      <div class="mfooter" id="mft"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY = '1441200b03c8a85caabd501a6632f9d5';
+let autoTimer = null;
+let activeChart = null;
+let alerts = [];
+
+const FC = {
+  RRPONTSYD:{t:'隔夜逆回购',u:'十亿美元',g:'gm',gr:'MONEY MARKET',d:'美联储隔夜逆回购（ONRRP）余额，反映货币市场过剩流动性规模。数值持续下降意味着市场流动性正在收紧。'},
+  OBFR:     {t:'OBFR',     u:'%',       g:'gm',gr:'MONEY MARKET',d:'隔夜银行融资利率，反映银行间无担保融资成本，与联邦基金利率高度相关。'},
+  SOFR:     {t:'SOFR',     u:'%',       g:'gm',gr:'MONEY MARKET',d:'担保隔夜融资利率，基于美国国债回购市场交易，是 LIBOR 的替代基准利率。'},
+  SOFRVOL:  {t:'SOFR 量',  u:'十亿美元',g:'gm',gr:'MONEY MARKET',d:'SOFR 每日成交量，反映美国回购市场深度与活跃度。量的突然下降可能预示流动性收缩。'},
+  T10Y2Y:   {t:'T10Y2Y',  u:'%',       g:'gm',gr:'MONEY MARKET',d:'10年期与2年期美债收益率利差。利差收窄或倒挂（负值）历史上是经济衰退的可靠领先指标。'},
+  WLCFLPCL: {t:'贴现窗口', u:'百万美元',g:'gl',gr:'LIQUIDITY',   d:'美联储贴现窗口贷款余额，银行紧急融资工具。余额大幅上升通常预示银行体系压力。'},
+  SWPT:     {t:'央行互换', u:'百万美元',g:'gl',gr:'LIQUIDITY',   d:'美联储与外国央行货币互换余额，反映全球美元流动性压力。余额上升表明海外市场美元短缺。'},
+  WRBWFRBL: {t:'准备金',   u:'百万美元',g:'gl',gr:'LIQUIDITY',   d:'银行体系在美联储持有的准备金余额（Reserve Balances）。准备金充足是银行稳定的重要缓冲。'},
+  RPONTSYD: {t:'SRF',     u:'十亿美元',g:'gl',gr:'LIQUIDITY',   d:'常备回购便利（Standing Repo Facility）使用量。非零值表示银行体系需要额外流动性支持。'},
+};
+const CME = {
+  gold:  {id:437,grid:'gg',gr:'GOLD FUTURES',  labels:['黄金 EFP','黄金 EFR','黄金 TAS','黄金交割'],fields:['efpVol','efrVol','tasVol','deliveryVol'],descs:['期货转现货合约量（EFP），反映期现套利需求。','期货转掉期合约量（EFR），反映风险管理需求。','结算价交易量（TAS），机构基准价格使用需求。','实物交割合约数，反映对实物黄金的实际需求。']},
+  silver:{id:458,grid:'gs',gr:'SILVER FUTURES',labels:['白银 EFP','白银 EFR','白银 TAS','白银交割'],fields:['efpVol','efrVol','tasVol','deliveryVol'],descs:['白银期货转现货合约量。','白银期货转掉期合约量。','白银结算价交易量。','白银实物交割合约数。']},
+};
+
+function getThresh(sid) {
+  const t10 = parseFloat(document.getElementById('threshT10').value) || 0.5;
+  const dw  = parseFloat(document.getElementById('threshDW').value)  || 10000;
+  if (sid === 'T10Y2Y')   return {cb: t10, wb: 0};
+  if (sid === 'WLCFLPCL') return {ca: dw,  wa: dw * 3};
+  if (sid === 'RPONTSYD') return {ca: 1,   wa: 50};
+  return {};
+}
+
+function getSt(sid, val) {
+  const th = getThresh(sid);
+  if (th.wb !== undefined && val <= th.wb) return 'w';
+  if (th.cb !== undefined && val <= th.cb) return 'c';
+  if (th.wa !== undefined && val >= th.wa) return 'w';
+  if (th.ca !== undefined && val >= th.ca) return 'c';
+  return 'n';
+}
+
+function fmtN(v, u) {
+  if (u === '%') return parseFloat(v).toFixed(2);
+  if (u === '十亿美元') return parseFloat(v).toFixed(3);
+  const n = parseFloat(v);
+  return n >= 1000 ? n.toLocaleString('en-US', {maximumFractionDigits:0}) : n.toFixed(2);
+}
+function fmtD(iso) {
+  if (!iso) return '--';
+  const d = new Date(iso + 'T12:00:00Z');
+  return (d.getUTCMonth()+1).toString().padStart(2,'0') + '/' + d.getUTCDate().toString().padStart(2,'0');
+}
+function tradDay(n = 1) {
+  const d = new Date(); d.setUTCDate(d.getUTCDate() - n);
+  let c = 0;
+  while ((d.getUTCDay() === 0 || d.getUTCDay() === 6) && c++ < 10) d.setUTCDate(d.getUTCDate() - 1);
+  return d.getUTCFullYear() + String(d.getUTCMonth()+1).padStart(2,'0') + String(d.getUTCDate()).padStart(2,'0');
+}
+
+function makeSkel(title) {
+  const d = document.createElement('div');
+  d.className = 'card'; d.style.cssText = 'opacity:.38;pointer-events:none';
+  d.innerHTML = `<div class="cbar n"></div><div class="ctop"><span class="ctitle">${title}</span><span class="badge n">...</span></div><div class="skel"></div>`;
+  return d;
+}
+
+function makeCard(title, val, unit, diff, pct, date, st, group, desc, src, sid) {
+  const sl = {n:'NRML',c:'CAUT',w:'WARN'}[st];
+  const iz = Math.abs(diff) < 0.000001;
+  const ds = iz ? '−' : (diff > 0 ? '↑' : '↓');
+  const dc = iz ? 'nc' : (diff > 0 ? 'up' : 'dn');
+  const ad = Math.abs(diff);
+  const dstr = iz ? '0' : (diff > 0 ? '+' : '-') + ad.toFixed(ad < 0.01 ? 4 : 2);
+  const ps = iz ? '0.00' : (diff > 0 ? '+' : '-') + Math.abs(pct).toFixed(2);
+  const ch = `${dstr} (${ps}%)`;
+  const el = document.createElement('div');
+  el.className = 'card' + (st === 'c' ? ' cau' : st === 'w' ? ' war' : '');
+  el.innerHTML = `
+    <div class="cbar ${st}"></div>
+    <div class="ctop"><span class="ctitle">${title}</span><span class="badge ${st}">${sl}</span></div>
+    <div class="cval"><span class="vnum ${st}">${val}</span><span class="vunit">${unit}</span></div>
+    <div class="cchg"><span class="${dc}">${ds}</span><span>${ch}</span></div>
+    <div class="cdate">${date}</div>`;
+  el.onclick = () => openMdl(group, title, val, unit, ds, dc, ch, st, desc, src, date, sid);
+  return el;
+}
+
+async function fetchFred(sid, limit = 5) {
+  const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${sid}&api_key=${KEY}&sort_order=desc&limit=${limit}&file_type=json`;
+  const r = await fetch(url); if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const data = await r.json();
+  return (data.observations || []).filter(o => o.value !== '.');
+}
+
+async function loadFred(sid) {
+  const cfg = FC[sid], grid = document.getElementById(cfg.g);
+  const sk = makeSkel(cfg.t); grid.appendChild(sk);
+  try {
+    const obs = await fetchFred(sid);
+    if (!obs.length) throw new Error('no data');
+    const c = parseFloat(obs[0].value), p = parseFloat((obs[1]||obs[0]).value);
+    const diff = c - p, pct = p !== 0 ? (c-p)/Math.abs(p)*100 : 0;
+    const st = getSt(sid, c);
+    if (st !== 'n') {
+      alerts.push({level: st, text: `${cfg.t} = ${fmtN(c, cfg.u)} ${cfg.u} — ${st === 'w' ? '⚠ 警告' : '△ 注意'}`});
+    }
+    const card = makeCard(cfg.t, fmtN(c, cfg.u), cfg.u, diff, pct, fmtD(obs[0].date), st, cfg.gr, cfg.d, `FRED — ${sid}`, sid);
+    grid.replaceChild(card, sk);
+  } catch(e) {
+    sk.style.cssText = ''; sk.className = 'card war';
+    sk.innerHTML = `<div class="cbar w"></div><div class="ctop"><span class="ctitle">${cfg.t}</span><span class="badge w">ERR</span></div><div class="cval"><span class="vnum w">--</span><span class="vunit">${cfg.u}</span></div><div class="cdate" style="color:#5a3030">加载失败</div>`;
+  }
+}
+
+async function fetchCme(pid, date) {
+  const r = await fetch(`https://www.cmegroup.com/CmeWS/mvc/Volume/Details/F/${pid}/${date}/P`);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const d = await r.json(); if (d.empty) throw new Error('empty');
+  return d.totals || {};
+}
+
+async function loadCme(metal) {
+  const cfg = CME[metal], grid = document.getElementById(cfg.grid);
+  const sks = cfg.labels.map(l => { const s = makeSkel(l); grid.appendChild(s); return s; });
+  let cur = null, prev = null, cd = '';
+  for (let i = 1; i <= 10; i++) {
+    try {
+      const d = tradDay(i), t = await fetchCme(cfg.id, d);
+      if (!cur) { cur = t; cd = d; } else if (!prev) { prev = t; break; }
+    } catch(e) {}
+  }
+  if (!prev) prev = cur || {};
+  cfg.fields.forEach((f, i) => {
+    const c = parseInt(cur ? cur[f]||0 : 0), p = parseInt(prev[f]||0);
+    const diff = c - p, pct = p !== 0 ? (diff/Math.abs(p))*100 : 0;
+    const dstr = cd ? cd.slice(4,6)+'/'+cd.slice(6,8) : '--';
+    const card = makeCard(cfg.labels[i], c.toLocaleString('en-US'), '合约数', diff, pct, dstr, 'n', cfg.gr, cfg.descs[i], `CME COMEX — 产品ID ${cfg.id}`, null);
+    grid.replaceChild(card, sks[i]);
+  });
+}
+
+function renderAlerts() {
+  const list = document.getElementById('alertsList');
+  list.innerHTML = '';
+  alerts.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'alert-item ' + (a.level === 'w' ? 'warn' : 'caut');
+    el.textContent = a.text;
+    list.appendChild(el);
+  });
+}
+
+// CHART
+let chartSid = null, chartPeriodDays = 90;
+async function loadChart(sid, days) {
+  chartSid = sid; chartPeriodDays = days;
+  document.getElementById('chartLoading').style.display = 'flex';
+  document.getElementById('chartCanvas').style.display = 'none';
+  if (activeChart) { activeChart.destroy(); activeChart = null; }
+  try {
+    const obs = await fetchFred(sid, days + 10);
+    const sorted = [...obs].reverse().slice(-days);
+    const labels = sorted.map(o => { const d = new Date(o.date+'T12:00:00Z'); return (d.getUTCMonth()+1)+'/'+d.getUTCDate(); });
+    const values = sorted.map(o => parseFloat(o.value));
+    const cfg = FC[sid];
+    const color = '#68908b';
+    document.getElementById('chartLoading').style.display = 'none';
+    const canvas = document.getElementById('chartCanvas');
+    canvas.style.display = 'block';
+    activeChart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          data: values, borderColor: color, borderWidth: 1.5,
+          pointRadius: 0, fill: true,
+          backgroundColor: (ctx) => {
+            const g = ctx.chart.ctx.createLinearGradient(0,0,0,140);
+            g.addColorStop(0,'rgba(104,144,123,.2)'); g.addColorStop(1,'rgba(104,144,123,0)'); return g;
+          },
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        plugins: { legend:{display:false}, tooltip:{
+          mode:'index', intersect:false,
+          callbacks:{ label: ctx => `${ctx.parsed.y.toFixed(cfg.u==='%'?2:3)} ${cfg.u}` },
+          backgroundColor:'#1a1a1a', borderColor:'#333', borderWidth:1,
+          titleColor:'#808080', bodyColor:'#e0e0e0',
+          titleFont:{family:'IBM Plex Mono',size:10}, bodyFont:{family:'IBM Plex Mono',size:11}
+        }},
+        scales: {
+          x:{ grid:{color:'#151515'}, ticks:{color:'#444',font:{family:'IBM Plex Mono',size:9}, maxTicksLimit:8, maxRotation:0} },
+          y:{ grid:{color:'#151515'}, ticks:{color:'#444',font:{family:'IBM Plex Mono',size:9}},
+              position:'right' }
+        }
+      }
+    });
+  } catch(e) {
+    document.getElementById('chartLoading').textContent = '图表加载失败';
+  }
+}
+
+function renderChartTabs(sid) {
+  const tabs = document.getElementById('chartTabs');
+  const periods = [{d:30,l:'1M'},{d:90,l:'3M'},{d:180,l:'6M'},{d:365,l:'1Y'}];
+  const def = parseInt(document.getElementById('chartPeriod').value) || 90;
+  tabs.innerHTML = '';
+  periods.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'ctab' + (p.d === def ? ' active' : '');
+    btn.textContent = p.l;
+    btn.onclick = () => {
+      tabs.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadChart(sid, p.d);
+    };
+    tabs.appendChild(btn);
+  });
+  loadChart(sid, def);
+}
+
+function openMdl(group, title, val, unit, dir, dc, chg, st, desc, src, date, sid) {
+  const sm = {n:'NORMAL — 指标处于正常区间', c:'CAUTION — 需要关注此指标', w:'WARNING — 指标出现异常'};
+  document.getElementById('mlbl').textContent  = group;
+  document.getElementById('mttl').textContent  = title;
+  document.getElementById('mnum').textContent  = val;
+  document.getElementById('mnum').className    = 'mnum ' + st;
+  document.getElementById('munit').textContent = unit;
+  const de = document.getElementById('mdir'); de.textContent = dir + ' '; de.className = dc;
+  document.getElementById('mchg').textContent  = chg;
+  document.getElementById('msrc').textContent  = '来源: ' + src;
+  document.getElementById('mbox').className    = 'mbox' + (st==='n'?'':' '+st);
+  document.getElementById('msd').className     = 'msd ' + st;
+  document.getElementById('mst').className     = 'mst ' + st;
+  document.getElementById('mst').textContent   = sm[st];
+  document.getElementById('mds').textContent   = desc;
+  document.getElementById('mft').textContent   = 'DATA DATE: ' + date;
+  document.getElementById('mdl').className     = 'mdl' + (st==='n'?'':' '+st);
+  const cs = document.getElementById('chartSection');
+  if (sid && FC[sid]) {
+    cs.style.display = 'block';
+    renderChartTabs(sid);
+  } else {
+    cs.style.display = 'none';
+    if (activeChart) { activeChart.destroy(); activeChart = null; }
+  }
+  document.getElementById('ov').classList.add('on');
+}
+
+function closeMdl() {
+  document.getElementById('ov').classList.remove('on');
+  if (activeChart) { activeChart.destroy(); activeChart = null; }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMdl(); });
+
+// DRAWER
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('open');
+  document.getElementById('settBtn').classList.toggle('active');
+}
+
+// AUTO REFRESH
+function toggleAuto() {
+  if (autoTimer) {
+    clearInterval(autoTimer); autoTimer = null;
+    document.getElementById('autoPill').classList.remove('on');
+    document.getElementById('autoBtn').classList.remove('active');
+  } else {
+    const mins = parseInt(document.getElementById('intervalSel').value) || 15;
+    if (mins === 0) { alert('请先在设置中选择刷新间隔'); return; }
+    autoTimer = setInterval(loadAll, mins * 60000);
+    document.getElementById('autoPill').classList.add('on');
+    document.getElementById('autoBtn').classList.add('active');
+  }
+}
+
+function setInterval_() {
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; toggleAuto(); }
+}
+
+async function loadAll() {
+  const btn = document.getElementById('rbtn');
+  btn.disabled = true; btn.textContent = '加载中...';
+  alerts = [];
+  ['gm','gl','gg','gs'].forEach(id => document.getElementById(id).innerHTML = '');
+  document.getElementById('alertsList').innerHTML = '';
+  try {
+    await Promise.all([
+      ...Object.keys(FC).map(id => loadFred(id)),
+      loadCme('gold'), loadCme('silver'),
+    ]);
+    renderAlerts();
+    const now = new Date();
+    document.getElementById('upd').textContent = 'UPDATED ' + now.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+  } catch(e) {}
+  btn.disabled = false; btn.textContent = '↺ 刷新';
+}
+
+loadAll();
+</script>
+</body>
+</html>
