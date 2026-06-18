@@ -1,0 +1,901 @@
+{
+  "courseSystem": {
+    "name": "SWEA MI6 交易系统",
+    "description": "从宏观到微观的完整交易闭环",
+    "version": "1.0",
+    "createdBy": "Vernon Tee (Traderpreneur Community)",
+    "totalLessons": 150,
+    "estimatedHours": 80
+  },
+  "modules": [
+    {
+      "id": "prerequisite",
+      "order": 0,
+      "name": "课前必修",
+      "nameEn": "Pre-requisite",
+      "description": "为学习 MI6 系统做好准备",
+      "icon": "🎯",
+      "color": "#FF6B6B",
+      "totalLessons": 2,
+      "estimatedHours": 1,
+      "lessons": [
+        {
+          "id": "pre-1",
+          "order": 1,
+          "title": "当你做到这些，你会惊讶地发现",
+          "titleEn": "Mindset Transformation",
+          "description": "思维转变课程 - 调整学习心态和预期",
+          "duration": 600,
+          "difficulty": 1,
+          "type": "video",
+          "keyPoints": [
+            "交易心态",
+            "期望管理",
+            "纪律性"
+          ],
+          "relatedTools": [],
+          "nextLesson": "pre-2"
+        },
+        {
+          "id": "pre-2",
+          "order": 2,
+          "title": "课前先准备好，沟通起来更顺畅",
+          "titleEn": "Learning Preparation",
+          "description": "学习准备指南 - 最大化学习效率",
+          "duration": 480,
+          "difficulty": 1,
+          "type": "video",
+          "keyPoints": [
+            "学习方法",
+            "工具准备",
+            "时间管理"
+          ],
+          "relatedTools": [],
+          "nextLesson": "mi1-1"
+        }
+      ]
+    },
+    {
+      "id": "mi1",
+      "order": 1,
+      "name": "MI1 - 汇市趋势",
+      "nameEn": "MI1 - Fundamental Analysis",
+      "description": "理解宏观经济如何驱动市场资金流向",
+      "icon": "📊",
+      "color": "#FF6B6B",
+      "totalLessons": 2,
+      "estimatedHours": 3,
+      "coreQuestion": "市场往哪去？",
+      "lessons": [
+        {
+          "id": "mi1-1",
+          "order": 1,
+          "title": "经济缸中的游鱼：解读通胀体系",
+          "titleEn": "Fish in Economic Tank: Understanding Inflation System",
+          "description": "通过生动的比喻，解析通货膨胀如何影响经济体系和货币价值",
+          "duration": 763,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "通胀的定义和成因",
+            "通胀对经济体系的影响",
+            "央行应对通胀的政策工具",
+            "通胀与资产价格的关系"
+          ],
+          "concepts": {
+            "inflation": "通货膨胀 - 商品和服务价格的普遍上升",
+            "monetaryPolicy": "货币政策 - 中央银行调控货币供应量的工具",
+            "purchasingPower": "购买力 - 货币能购买的商品和服务的数量"
+          },
+          "relatedTools": [
+            "economic-calendar",
+            "inflation-tracker"
+          ],
+          "nextLesson": "mi1-2"
+        },
+        {
+          "id": "mi1-2",
+          "order": 2,
+          "title": "寻找财富根源：钱的方向与水位深度揭秘",
+          "titleEn": "Finding Wealth Root: Money Flow and Depth Revelation",
+          "description": "探讨资金在不同市场间的流动规律，理解宏观经济周期与资产价格的关系",
+          "duration": 945,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "资金流向的规律",
+            "经济周期的阶段",
+            "不同资产的表现差异",
+            "宏观环境与交易机会"
+          ],
+          "concepts": {
+            "capitalFlow": "资金流向 - 资金在股票、债券、商品等市场间的流动",
+            "economicCycle": "经济周期 - 扩张、顶峰、收缩、谷底四个阶段",
+            "assetRotation": "资产轮动 - 不同经济阶段不同资产表现最佳"
+          },
+          "relatedTools": [
+            "economic-calendar",
+            "gdp-tracker",
+            "interest-rate-monitor"
+          ],
+          "nextLesson": "mi2-1"
+        }
+      ]
+    },
+    {
+      "id": "mi2",
+      "order": 2,
+      "name": "MI2 - 价格行为",
+      "nameEn": "MI2 - Price Action",
+      "description": "通过图表上最原始的价格变动判断市场情绪",
+      "icon": "📈",
+      "color": "#4ECDC4",
+      "totalLessons": 3,
+      "estimatedHours": 5,
+      "coreQuestion": "现在在哪里？",
+      "lessons": [
+        {
+          "id": "mi2-1",
+          "order": 1,
+          "title": "蜡烛形态 | Candlestick Pattern",
+          "titleEn": "Candlestick Pattern Analysis",
+          "description": "学习解读单根或多根K线组合背后的多空博弈",
+          "duration": 1200,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "单根K线的含义",
+            "K线组合形态",
+            "多空力量对比",
+            "反转信号识别"
+          ],
+          "patterns": [
+            {
+              "name": "锤子线",
+              "description": "下影线长，实体小，通常出现在下跌后",
+              "signal": "可能的底部反转信号"
+            },
+            {
+              "name": "倒锤子线",
+              "description": "上影线长，实体小，通常出现在上升后",
+              "signal": "可能的顶部反转信号"
+            },
+            {
+              "name": "吞没形态",
+              "description": "前一根K线被完全包含在后一根K线内",
+              "signal": "强势反转信号"
+            }
+          ],
+          "relatedTools": [
+            "candlestick-guide",
+            "pattern-identifier"
+          ],
+          "nextLesson": "mi2-2"
+        },
+        {
+          "id": "mi2-2",
+          "order": 2,
+          "title": "图表形态 | Chart Pattern",
+          "titleEn": "Chart Pattern Recognition",
+          "description": "识别经典的持续和反转形态",
+          "duration": 1350,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "反转形态识别",
+            "持续形态识别",
+            "突破点确认",
+            "目标位计算"
+          ],
+          "patterns": [
+            {
+              "name": "头肩顶",
+              "type": "reversal",
+              "description": "三个峰值，中间最高，两侧较低",
+              "signal": "强势下跌信号"
+            },
+            {
+              "name": "双底",
+              "type": "reversal",
+              "description": "两个相近的低点，中间有反弹",
+              "signal": "强势上升信号"
+            },
+            {
+              "name": "旗形",
+              "type": "continuation",
+              "description": "价格在两条平行线间震荡",
+              "signal": "趋势继续信号"
+            },
+            {
+              "name": "三角形",
+              "type": "continuation",
+              "description": "高点逐渐降低，低点逐渐升高",
+              "signal": "突破即将发生"
+            }
+          ],
+          "relatedTools": [
+            "pattern-guide",
+            "support-resistance-marker"
+          ],
+          "nextLesson": "mi2-3"
+        },
+        {
+          "id": "mi2-3",
+          "order": 3,
+          "title": "波浪形态攻略 | Elliott Wave",
+          "titleEn": "Elliott Wave Theory",
+          "description": "运用艾略特波浪理论，分析市场运行的周期和阶段",
+          "duration": 1500,
+          "difficulty": 3,
+          "type": "video",
+          "keyPoints": [
+            "5浪上升结构",
+            "3浪下跌结构",
+            "浪级划分",
+            "精准定位买卖点"
+          ],
+          "waveStructure": {
+            "uptrend": {
+              "description": "5浪上升 + 3浪下跌 = 完整周期",
+              "waves": [
+                { "number": 1, "type": "impulse", "description": "初始上升" },
+                { "number": 2, "type": "correction", "description": "回调，不破浪1低点" },
+                { "number": 3, "type": "impulse", "description": "最强上升，通常最长" },
+                { "number": 4, "type": "correction", "description": "回调，不破浪1高点" },
+                { "number": 5, "type": "impulse", "description": "最后上升" }
+              ]
+            },
+            "downtrend": {
+              "description": "3浪下跌结构",
+              "waves": [
+                { "letter": "A", "type": "impulse", "description": "初始下跌" },
+                { "letter": "B", "type": "correction", "description": "反弹" },
+                { "letter": "C", "type": "impulse", "description": "继续下跌" }
+              ]
+            }
+          },
+          "relatedTools": [
+            "elliott-wave-guide",
+            "wave-counter"
+          ],
+          "nextLesson": "mi3-1"
+        }
+      ]
+    },
+    {
+      "id": "mi3",
+      "order": 3,
+      "name": "MI3 - 技术工具",
+      "nameEn": "MI3 - Technical Tools",
+      "description": "用指标辅助验证价格行为和趋势",
+      "icon": "🔧",
+      "color": "#FFE66D",
+      "totalLessons": 4,
+      "estimatedHours": 6,
+      "coreQuestion": "信号是否可靠？",
+      "lessons": [
+        {
+          "id": "mi3-1",
+          "order": 1,
+          "title": "布林带 | Bollinger Band",
+          "titleEn": "Bollinger Band Strategy",
+          "description": "利用波动率通道判断价格的相对高低位及突破机会",
+          "duration": 900,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "布林带的构成",
+            "中轨、上轨、下轨的含义",
+            "波动率的应用",
+            "交易信号生成"
+          ],
+          "indicator": {
+            "name": "Bollinger Band",
+            "formula": "中轨 = 20日SMA, 上轨 = 中轨 + 2σ, 下轨 = 中轨 - 2σ",
+            "signals": [
+              {
+                "condition": "价格触及上轨",
+                "interpretation": "价格可能过高，可能回调"
+              },
+              {
+                "condition": "价格触及下轨",
+                "interpretation": "价格可能过低，可能反弹"
+              },
+              {
+                "condition": "布林带收窄",
+                "interpretation": "波动率降低，可能即将突破"
+              },
+              {
+                "condition": "布林带扩张",
+                "interpretation": "波动率增加，趋势可能加强"
+              }
+            ]
+          },
+          "relatedTools": [
+            "bollinger-band-calculator",
+            "volatility-monitor"
+          ],
+          "nextLesson": "mi3-2"
+        },
+        {
+          "id": "mi3-2",
+          "order": 2,
+          "title": "斐波那契回撤 | Fibonacci Retracement",
+          "titleEn": "Fibonacci Retracement Levels",
+          "description": "寻找价格回调的潜在支撑和阻力位",
+          "duration": 850,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "斐波那契数列",
+            "关键回撤位",
+            "支撑阻力判断",
+            "目标位预测"
+          ],
+          "indicator": {
+            "name": "Fibonacci Retracement",
+            "levels": [
+              { "ratio": "0%", "description": "起点" },
+              { "ratio": "23.6%", "description": "浅回撤" },
+              { "ratio": "38.2%", "description": "中等回撤" },
+              { "ratio": "50%", "description": "中点（非斐波那契）" },
+              { "ratio": "61.8%", "description": "深回撤（黄金比例）" },
+              { "ratio": "100%", "description": "完全回撤"
+              }
+            ],
+            "usage": "从低点到高点（上升趋势）或从高点到低点（下降趋势）"
+          },
+          "relatedTools": [
+            "fibonacci-calculator",
+            "support-resistance-marker"
+          ],
+          "nextLesson": "mi3-3"
+        },
+        {
+          "id": "mi3-3",
+          "order": 3,
+          "title": "移动平均线 | Moving Average",
+          "titleEn": "Moving Average Strategy",
+          "description": "识别趋势方向并提供动态的支撑/阻力参考",
+          "duration": 920,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "简单移动平均线 (SMA)",
+            "指数移动平均线 (EMA)",
+            "MA排列与趋势",
+            "金叉死叉信号"
+          ],
+          "indicator": {
+            "name": "Moving Average",
+            "types": [
+              {
+                "name": "SMA (Simple MA)",
+                "formula": "过去N天收盘价的算术平均值",
+                "characteristics": "反应迟缓，适合长期趋势"
+              },
+              {
+                "name": "EMA (Exponential MA)",
+                "formula": "给予近期价格更高的权重",
+                "characteristics": "反应灵敏，适合短期交易"
+              }
+            ],
+            "commonPeriods": [10, 20, 50, 100, 200],
+            "signals": [
+              {
+                "condition": "短期MA > 中期MA > 长期MA",
+                "interpretation": "强势上升趋势"
+              },
+              {
+                "condition": "短期MA < 中期MA < 长期MA",
+                "interpretation": "强势下降趋势"
+              },
+              {
+                "condition": "短期MA上穿中期MA",
+                "interpretation": "金叉，买入信号"
+              },
+              {
+                "condition": "短期MA下穿中期MA",
+                "interpretation": "死叉，卖出信号"
+              }
+            ]
+          },
+          "relatedTools": [
+            "ma-calculator",
+            "trend-analyzer"
+          ],
+          "nextLesson": "mi3-4"
+        },
+        {
+          "id": "mi3-4",
+          "order": 4,
+          "title": "叠加对照指标 | Overlay Indicator",
+          "titleEn": "Multi-Indicator Confluence",
+          "description": "通过多个指标的共振来提高交易信号的胜率",
+          "duration": 1050,
+          "difficulty": 3,
+          "type": "video",
+          "keyPoints": [
+            "指标组合策略",
+            "信号共振的重要性",
+            "避免过度优化",
+            "实战应用案例"
+          ],
+          "concept": {
+            "definition": "将多个技术指标叠加在一起，寻找多个指标同时发出相同信号的时刻",
+            "principle": "多个指标共振 > 单一指标信号",
+            "benefits": [
+              "提高信号的可靠性",
+              "减少虚假信号",
+              "增加交易胜率"
+            ]
+          },
+          "exampleStrategy": {
+            "name": "三指标共振策略",
+            "indicators": [
+              "移动平均线排列（趋势确认）",
+              "布林带位置（超买超卖）",
+              "斐波那契回撤位（支撑阻力）"
+            ],
+            "signal": "当价格在上升趋势中回调到斐波那契61.8%，同时触及布林带下轨，且在MA上方时，视为买入信号"
+          },
+          "relatedTools": [
+            "multi-indicator-analyzer",
+            "signal-confluence-checker"
+          ],
+          "nextLesson": "mi4-1"
+        }
+      ]
+    },
+    {
+      "id": "mi4",
+      "order": 4,
+      "name": "MI4 - 入场时机",
+      "nameEn": "MI4 - Strategy",
+      "description": "解决'何时买卖'的问题",
+      "icon": "⏰",
+      "color": "#95E1D3",
+      "totalLessons": 1,
+      "estimatedHours": 2,
+      "coreQuestion": "何时进场？",
+      "lessons": [
+        {
+          "id": "mi4-1",
+          "order": 1,
+          "title": "左侧 & 右侧 | Trend Reversal & Trend Continuation",
+          "titleEn": "Left Side vs Right Side Trading",
+          "description": "探讨左侧交易（预测反转）与右侧交易（顺势跟进）的策略差异及应用场景",
+          "duration": 1200,
+          "difficulty": 3,
+          "type": "video",
+          "keyPoints": [
+            "左侧交易的定义和特点",
+            "右侧交易的定义和特点",
+            "两种策略的优缺点",
+            "如何选择合适的策略"
+          ],
+          "strategies": {
+            "leftSide": {
+              "name": "左侧交易",
+              "description": "在价格反转前提前布局",
+              "timing": "在顶部或底部区域",
+              "characteristics": [
+                "提前进场，获利潜力大",
+                "风险较大，容易被套",
+                "需要强大的心理素质"
+              ],
+              "bestFor": "顶部/底部区域，强势反转信号出现时",
+              "riskLevel": "高"
+            },
+            "rightSide": {
+              "name": "右侧交易",
+              "description": "在趋势确认后顺势跟进",
+              "timing": "在趋势已形成后",
+              "characteristics": [
+                "风险相对较小",
+                "进场点较晚，收益相对",
+                "更容易执行"
+              ],
+              "bestFor": "趋势已确认，持续向上/下的阶段",
+              "riskLevel": "低"
+            }
+          },
+          "decisionFramework": {
+            "step1": "识别关键支撑/阻力位",
+            "step2": "观察价格行为（K线组合、形态）",
+            "step3": "确认指标信号",
+            "step4": "判断是否处于反转区域（左侧）或趋势区域（右侧）",
+            "step5": "决定入场策略",
+            "step6": "设置止损和止盈"
+          },
+          "relatedTools": [
+            "entry-point-analyzer",
+            "trend-reversal-detector"
+          ],
+          "nextLesson": "mi5-1"
+        }
+      ]
+    },
+    {
+      "id": "mi5",
+      "order": 5,
+      "name": "MI5 - 风险回报",
+      "nameEn": "MI5 - Risk & Reward",
+      "description": "通过科学的资金管理实现长期稳定盈利",
+      "icon": "💰",
+      "color": "#F38181",
+      "totalLessons": 1,
+      "estimatedHours": 2,
+      "coreQuestion": "如何控制风险？",
+      "lessons": [
+        {
+          "id": "mi5-1",
+          "order": 1,
+          "title": "盈利 & 止损的艺术 | Art of TP & SL",
+          "titleEn": "Take Profit & Stop Loss Management",
+          "description": "教授如何科学地设置止盈（Take Profit）和止损（Stop Loss），确保每一笔交易都具有合理的盈亏比",
+          "duration": 1100,
+          "difficulty": 2,
+          "type": "video",
+          "keyPoints": [
+            "止损的重要性",
+            "止盈的设置方法",
+            "盈亏比的计算",
+            "风险管理的最佳实践"
+          ],
+          "riskManagement": {
+            "stopLoss": {
+              "name": "止损 (SL)",
+              "definition": "损失的最大承受额",
+              "importance": "⭐⭐⭐⭐⭐ 必须设置",
+              "principles": [
+                "基于技术位置设置（不是随意设置）",
+                "通常设在关键支撑/阻力位下方",
+                "不随意移动，保持纪律性"
+              ],
+              "example": "在1.2000买入，止损设在1.1950（50点风险）"
+            },
+            "takeProfit": {
+              "name": "止盈 (TP)",
+              "definition": "目标利润位置",
+              "importance": "⭐⭐⭐⭐⭐ 提前规划",
+              "principles": [
+                "基于技术目标设置",
+                "可以分批止盈",
+                "根据盈亏比确定"
+              ],
+              "example": "止盈设在1.2100（100点利润），盈亏比 1:2"
+            },
+            "riskRewardRatio": {
+              "name": "盈亏比 (R:R)",
+              "definition": "止盈与止损的比例",
+              "importance": "⭐⭐⭐⭐⭐ 最少1:2",
+              "formula": "TP距离 / SL距离",
+              "example": "SL 50点，TP 100点，盈亏比 1:2",
+              "minimumRequirement": "1:2 或更高"
+            },
+            "positionSizing": {
+              "name": "仓位管理",
+              "definition": "单笔风险占账户的比例",
+              "importance": "⭐⭐⭐⭐⭐ 通常≤2%",
+              "formula": "风险金额 = 账户余额 × 风险百分比",
+              "example": "账户10000美元，风险2%，则风险金额200美元"
+            }
+          },
+          "keyFormulas": [
+            {
+              "name": "期望收益",
+              "formula": "期望收益 = 胜率 × 平均盈利 - (1-胜率) × 平均亏损",
+              "example": "胜率60%，盈亏比1:2，期望收益 = 60% × 2 - 40% × 1 = 0.8（正期望）"
+            },
+            {
+              "name": "风险金额",
+              "formula": "风险金额 = 账户余额 × 风险百分比",
+              "example": "账户10000，风险2%，风险金额 = 200"
+            },
+            {
+              "name": "仓位大小",
+              "formula": "仓位大小 = 风险金额 / 止损点数",
+              "example": "风险200，止损50点，仓位 = 200/50 = 4手"
+            }
+          ],
+          "bestPractices": [
+            "每笔交易风险不超过账户的 2%",
+            "盈亏比至少 1:2 或更高",
+            "设置固定止损，不随意移动",
+            "定期复盘，优化胜率和盈亏比",
+            "保持交易纪律性"
+          ],
+          "relatedTools": [
+            "risk-calculator",
+            "position-sizer",
+            "risk-reward-calculator"
+          ],
+          "nextLesson": "mi6-1"
+        }
+      ]
+    },
+    {
+      "id": "mi6",
+      "order": 6,
+      "name": "MI6 - 盈利翻倍",
+      "nameEn": "MI6 - X-Factor",
+      "description": "在控制风险的前提下放大交易利润",
+      "icon": "🚀",
+      "color": "#AA96DA",
+      "totalLessons": 1,
+      "estimatedHours": 2,
+      "coreQuestion": "如何放大利润？",
+      "lessons": [
+        {
+          "id": "mi6-1",
+          "order": 1,
+          "title": "X-Factor 执行与计算 | X-Factor Method + Calculation",
+          "titleEn": "X-Factor Execution and Calculation",
+          "description": "探讨如何通过特定的仓位管理或加仓技巧，在控制风险的前提下实现利润的最大化",
+          "duration": 1300,
+          "difficulty": 3,
+          "type": "video",
+          "keyPoints": [
+            "X-Factor 的定义和原理",
+            "加仓的时机和方法",
+            "利润锁定策略",
+            "风险控制在加仓中的应用"
+          ],
+          "xFactorMethod": {
+            "definition": "通过特定的仓位管理技巧，在已确认的趋势中逐步加仓，放大利润",
+            "principle": "只在确认趋势后加仓，加仓后的总风险不能超过初始风险",
+            "framework": {
+              "step1": {
+                "name": "初始仓位",
+                "description": "设置合理的止损",
+                "example": "买入1手，止损50点"
+              },
+              "step2": {
+                "name": "第一目标",
+                "description": "达到后锁定部分利润",
+                "example": "价格上升100点时，卖出0.5手，锁定50点利润"
+              },
+              "step3": {
+                "name": "加仓点",
+                "description": "确认趋势继续后加仓",
+                "example": "价格突破新高后，再买入1手"
+              },
+              "step4": {
+                "name": "追踪止损",
+                "description": "随价格移动止损",
+                "example": "止损从50点移动到100点（成本价）"
+              },
+              "step5": {
+                "name": "最终目标",
+                "description": "设置最大利润目标",
+                "example": "总目标200点，全部平仓"
+              }
+            }
+          },
+          "scalingMethods": [
+            {
+              "name": "分批加仓",
+              "description": "在确认趋势后逐步加仓",
+              "riskLevel": "中等",
+              "example": "第1笔：1手，第2笔：1手（趋势确认后），第3笔：0.5手（继续上升）"
+            },
+            {
+              "name": "利润锁定",
+              "description": "部分止盈后移动止损",
+              "riskLevel": "低",
+              "example": "达到目标的50%时卖出一半，止损移到成本价"
+            },
+            {
+              "name": "金字塔加仓",
+              "description": "每次加仓量递减",
+              "riskLevel": "中等",
+              "example": "第1笔：2手，第2笔：1.5手，第3笔：1手"
+            },
+            {
+              "name": "固定比例加仓",
+              "description": "每次加仓固定数量",
+              "riskLevel": "中等",
+              "example": "每次加仓1手，共加仓3次"
+            }
+          ],
+          "keyPrinciples": [
+            "只在已确认的趋势中加仓",
+            "加仓后的总风险不能超过初始风险",
+            "利润达到一定水平后立即锁定部分利润",
+            "保持纪律性，不贪心"
+          ],
+          "riskControl": {
+            "principle": "加仓后的总风险 ≤ 初始风险",
+            "example": {
+              "initialPosition": "买入1手，止损50点，风险200美元",
+              "scalingRule": "加仓后，总止损点数不能超过50点",
+              "calculation": "如果加仓到2手，新止损应该是25点"
+            }
+          },
+          "relatedTools": [
+            "scaling-calculator",
+            "position-tracker",
+            "profit-lock-calculator"
+          ],
+          "nextLesson": null
+        }
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "id": "risk-calculator",
+      "name": "风险计算器",
+      "category": "risk-management",
+      "description": "计算单笔交易的风险金额和仓位大小",
+      "inputs": [
+        {
+          "name": "accountSize",
+          "label": "账户金额",
+          "type": "number",
+          "unit": "USD",
+          "placeholder": "10000"
+        },
+        {
+          "name": "riskPercent",
+          "label": "风险百分比",
+          "type": "number",
+          "unit": "%",
+          "placeholder": "2",
+          "max": 5
+        },
+        {
+          "name": "stopLossPoints",
+          "label": "止损点数",
+          "type": "number",
+          "unit": "pips",
+          "placeholder": "50"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "riskAmount",
+          "label": "风险金额",
+          "formula": "accountSize * riskPercent / 100"
+        },
+        {
+          "name": "positionSize",
+          "label": "仓位大小",
+          "formula": "riskAmount / stopLossPoints"
+        }
+      ],
+      "relatedModules": ["mi5"]
+    },
+    {
+      "id": "risk-reward-calculator",
+      "name": "盈亏比计算器",
+      "category": "risk-management",
+      "description": "计算盈亏比和期望收益",
+      "inputs": [
+        {
+          "name": "stopLossPoints",
+          "label": "止损点数",
+          "type": "number",
+          "unit": "pips"
+        },
+        {
+          "name": "takeProfitPoints",
+          "label": "止盈点数",
+          "type": "number",
+          "unit": "pips"
+        },
+        {
+          "name": "winRate",
+          "label": "胜率",
+          "type": "number",
+          "unit": "%",
+          "min": 0,
+          "max": 100
+        }
+      ],
+      "outputs": [
+        {
+          "name": "riskRewardRatio",
+          "label": "盈亏比",
+          "formula": "takeProfitPoints / stopLossPoints"
+        },
+        {
+          "name": "expectedReturn",
+          "label": "期望收益",
+          "formula": "(winRate/100) * takeProfitPoints - ((100-winRate)/100) * stopLossPoints"
+        }
+      ],
+      "relatedModules": ["mi5"]
+    },
+    {
+      "id": "economic-calendar",
+      "name": "经济日历",
+      "category": "fundamental-analysis",
+      "description": "显示重要经济数据发布时间和预期值",
+      "relatedModules": ["mi1"]
+    },
+    {
+      "id": "candlestick-guide",
+      "name": "蜡烛形态指南",
+      "category": "price-action",
+      "description": "图形化展示各种蜡烛形态及其含义",
+      "relatedModules": ["mi2"]
+    },
+    {
+      "id": "pattern-identifier",
+      "name": "形态识别工具",
+      "category": "price-action",
+      "description": "帮助识别图表中的各种形态",
+      "relatedModules": ["mi2"]
+    },
+    {
+      "id": "support-resistance-marker",
+      "name": "支撑阻力标记工具",
+      "category": "technical-analysis",
+      "description": "标记关键的支撑和阻力位",
+      "relatedModules": ["mi2", "mi3"]
+    },
+    {
+      "id": "multi-indicator-analyzer",
+      "name": "多指标分析器",
+      "category": "technical-analysis",
+      "description": "分析多个指标的共振情况",
+      "relatedModules": ["mi3"]
+    }
+  ],
+  "learningPaths": [
+    {
+      "id": "beginner",
+      "name": "初级学习路径",
+      "description": "适合交易新手的学习计划",
+      "duration": 2,
+      "weeks": 2,
+      "modules": ["prerequisite", "mi1"],
+      "goals": [
+        "理解宏观经济与市场的关系",
+        "调整交易心态",
+        "建立基本的经济分析能力"
+      ]
+    },
+    {
+      "id": "intermediate",
+      "name": "中级学习路径",
+      "description": "掌握价格行为和技术分析",
+      "duration": 4,
+      "weeks": 4,
+      "modules": ["mi2", "mi3"],
+      "goals": [
+        "识别各种价格形态",
+        "熟练运用技术指标",
+        "提高交易信号的可靠性"
+      ]
+    },
+    {
+      "id": "advanced",
+      "name": "高级学习路径",
+      "description": "学习入场策略和风险管理",
+      "duration": 4,
+      "weeks": 4,
+      "modules": ["mi4", "mi5"],
+      "goals": [
+        "掌握左侧和右侧交易策略",
+        "建立科学的风险管理体系",
+        "提高交易的稳定性"
+      ]
+    },
+    {
+      "id": "mastery",
+      "name": "精通学习路径",
+      "description": "学习利润放大和实战应用",
+      "duration": 2,
+      "weeks": 2,
+      "modules": ["mi6"],
+      "goals": [
+        "掌握X-Factor加仓技巧",
+        "实现利润最大化",
+        "形成个人的交易系统"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,192 @@
+/* ============================================================
+   SWEA MI6 Signal Analyzer — Design System
+   Theme: Financial Professional Deep Blue (Plan C)
+   Palette: Deep Navy #0a1628 · Gold #f0b429 · Ice Blue #38bdf8
+   Fonts: Sora (headings) + Fira Code (data) + Inter (body)
+   ============================================================ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* === Plan C: Financial Deep Blue === */
+  /* Background layers: deep navy */
+  --background:         oklch(0.13 0.03 240);   /* #0a1628 deep navy */
+  --foreground:         oklch(0.93 0.01 220);   /* near-white ice */
+  --card:               oklch(0.17 0.03 240);   /* #0f1e35 card navy */
+  --card-foreground:    oklch(0.93 0.01 220);
+  --popover:            oklch(0.17 0.03 240);
+  --popover-foreground: oklch(0.93 0.01 220);
+
+  /* Primary: Gold */
+  --primary:            oklch(0.78 0.15 75);    /* #f0b429 gold */
+  --primary-foreground: oklch(0.13 0.03 240);   /* navy on gold */
+
+  /* Secondary: subtle navy highlight */
+  --secondary:          oklch(0.20 0.04 240);
+  --secondary-foreground: oklch(0.80 0.02 220);
+
+  /* Muted */
+  --muted:              oklch(0.22 0.03 240);
+  --muted-foreground:   oklch(0.58 0.03 230);
+
+  /* Accent: Ice Blue */
+  --accent:             oklch(0.25 0.05 240);
+  --accent-foreground:  oklch(0.72 0.12 210);   /* #38bdf8 ice blue */
+
+  /* Destructive */
+  --destructive:        oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  /* Borders */
+  --border:             oklch(1 0 0 / 10%);
+  --input:              oklch(1 0 0 / 12%);
+  --ring:               oklch(0.78 0.15 75);    /* gold ring */
+
+  /* Charts */
+  --chart-1: oklch(0.72 0.12 210);
+  --chart-2: oklch(0.78 0.15 75);
+  --chart-3: oklch(0.65 0.18 145);
+  --chart-4: oklch(0.62 0.22 25);
+  --chart-5: oklch(0.60 0.15 280);
+
+  /* Sidebar */
+  --sidebar:                    oklch(0.15 0.04 240);
+  --sidebar-foreground:         oklch(0.93 0.01 220);
+  --sidebar-primary:            oklch(0.78 0.15 75);
+  --sidebar-primary-foreground: oklch(0.13 0.03 240);
+  --sidebar-accent:             oklch(0.20 0.04 240);
+  --sidebar-accent-foreground:  oklch(0.80 0.02 220);
+  --sidebar-border:             oklch(1 0 0 / 8%);
+  --sidebar-ring:               oklch(0.78 0.15 75);
+
+  /* Custom brand tokens */
+  --gold:       oklch(0.78 0.15 75);
+  --ice-blue:   oklch(0.72 0.12 210);
+  --navy-deep:  oklch(0.13 0.03 240);
+  --navy-card:  oklch(0.17 0.03 240);
+  --navy-hover: oklch(0.22 0.04 240);
+
+  /* Signal colors */
+  --signal-bull-strong: oklch(0.62 0.18 145);   /* deep green */
+  --signal-bull:        oklch(0.72 0.16 145);   /* green */
+  --signal-bear-strong: oklch(0.55 0.22 25);    /* deep red */
+  --signal-bear:        oklch(0.65 0.20 25);    /* red */
+  --signal-mixed:       oklch(0.72 0.14 75);    /* amber */
+  --signal-neutral:     oklch(0.55 0.02 240);   /* slate */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
+  }
+  .font-data {
+    font-family: 'Fira Code', monospace;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+  @media (min-width: 640px) {
+    .container { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .container { padding-left: 2rem; padding-right: 2rem; max-width: 1280px; }
+  }
+
+  /* Gold shimmer border for active cards */
+  .gold-border {
+    border-color: oklch(0.78 0.15 75 / 60%);
+    box-shadow: 0 0 0 1px oklch(0.78 0.15 75 / 20%), 0 4px 20px oklch(0.78 0.15 75 / 8%);
+  }
+
+  /* Ice blue glow for data elements */
+  .ice-glow {
+    box-shadow: 0 0 12px oklch(0.72 0.12 210 / 30%);
+  }
+
+  /* Signal badge styles */
+  .signal-bull-strong { background: oklch(0.62 0.18 145 / 15%); color: oklch(0.72 0.16 145); border-color: oklch(0.62 0.18 145 / 40%); }
+  .signal-bull        { background: oklch(0.72 0.16 145 / 10%); color: oklch(0.78 0.14 145); border-color: oklch(0.72 0.16 145 / 30%); }
+  .signal-bear-strong { background: oklch(0.55 0.22 25 / 15%);  color: oklch(0.65 0.20 25);  border-color: oklch(0.55 0.22 25 / 40%); }
+  .signal-bear        { background: oklch(0.65 0.20 25 / 10%);  color: oklch(0.72 0.18 25);  border-color: oklch(0.65 0.20 25 / 30%); }
+  .signal-mixed       { background: oklch(0.72 0.14 75 / 12%);  color: oklch(0.78 0.15 75);  border-color: oklch(0.72 0.14 75 / 35%); }
+  .signal-neutral     { background: oklch(0.55 0.02 240 / 12%); color: oklch(0.65 0.03 230); border-color: oklch(0.55 0.02 240 / 30%); }
+
+  /* Direction button states */
+  .dir-bullish  { background: oklch(0.62 0.18 145 / 20%); color: oklch(0.72 0.16 145); border-color: oklch(0.62 0.18 145 / 50%); }
+  .dir-bearish  { background: oklch(0.55 0.22 25 / 20%);  color: oklch(0.65 0.20 25);  border-color: oklch(0.55 0.22 25 / 50%); }
+  .dir-neutral  { background: oklch(0.55 0.02 240 / 20%); color: oklch(0.65 0.03 230); border-color: oklch(0.55 0.02 240 / 50%); }
+  .dir-inactive { background: transparent; color: oklch(0.55 0.03 230); border-color: oklch(1 0 0 / 10%); }
+}
