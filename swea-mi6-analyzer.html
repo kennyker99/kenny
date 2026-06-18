@@ -16,18 +16,25 @@
           sora: ["Sora", "sans-serif"],
           mono: ["Fira Code", "monospace"],
         },
+        colors: {
+          // Plan C palette — remap slate to a blue "deep navy" scale so the
+          // whole UI matches the original design (#0a1628 navy / #0f1e35 card).
+          slate: {
+            50:  "#eef2f8", 100: "#dde4ef", 200: "#c0cbdd", 300: "#9aa9c2",
+            400: "#7385a3", 500: "#566782", 600: "#3e4f6b", 700: "#22324f",
+            800: "#13243f", 900: "#0d1a30", 950: "#070f1d",
+          },
+          // Brand gold (#f0b429) in place of amber.
+          amber: {
+            300: "#f7d472", 400: "#f5c33b", 500: "#f0b429", 600: "#d99e15", 700: "#b8830f",
+          },
+        },
       },
     },
   };
 </script>
 <style>
   body { font-family: "Inter", sans-serif; background:#0a1628; color:#e2e8f0; }
-  .terminal-grid {
-    background-image:
-      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 32px 32px;
-  }
   /* custom scrollbar */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -37,7 +44,7 @@
   @keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform:none; } }
 </style>
 </head>
-<body class="terminal-grid">
+<body>
 
 <!-- Safelist: pre-generate dynamic color classes so the Tailwind CDN JIT
      creates them at startup (prevents first-click flash). Hidden, never shown. -->
@@ -64,7 +71,7 @@
   <!-- Sidebar -->
   <aside id="sidebar" class="fixed top-0 left-0 h-full z-50 w-60 flex flex-col bg-slate-900 border-r border-white/8 -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="flex items-center gap-3 px-4 py-5 border-b border-white/8">
-      <div class="w-9 h-9 rounded-lg bg-amber-500 text-slate-900 flex items-center justify-center font-bold font-sora flex-shrink-0">M6</div>
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663760427773/HQcFGvWtUrkYo8K9xZ8psQ/mi6-logo-mLcQJkZGaxesX6yuwDt3Ls.webp" alt="SWEA MI6" class="w-9 h-9 rounded-lg flex-shrink-0 object-contain" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'w-9 h-9 rounded-lg bg-amber-500 text-slate-900 flex items-center justify-center font-bold flex-shrink-0',textContent:'M6'}))" />
       <div>
         <div class="text-sm font-bold font-sora leading-tight">SWEA MI6</div>
         <div class="text-xs text-slate-500 leading-tight">Signal Analyzer</div>
@@ -82,7 +89,7 @@
     <button id="menuBtn" class="p-1 text-slate-200">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div class="w-7 h-7 rounded bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-bold">M6</div>
+    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663760427773/HQcFGvWtUrkYo8K9xZ8psQ/mi6-logo-mLcQJkZGaxesX6yuwDt3Ls.webp" alt="SWEA MI6" class="w-7 h-7 rounded flex-shrink-0 object-contain" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'w-7 h-7 rounded bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-bold',textContent:'M6'}))" />
     <span class="text-sm font-bold font-sora">SWEA MI6 Analyzer</span>
   </div>
 
