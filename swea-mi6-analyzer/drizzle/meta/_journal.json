@@ -1,12 +1,12 @@
 {
   "version": "7",
-  "dialect": "postgresql",
+  "dialect": "mysql",
   "entries": [
     {
       "idx": 0,
-      "version": "7",
-      "when": 1782408863720,
-      "tag": "0000_wide_inertia",
+      "version": "5",
+      "when": 1782410032675,
+      "tag": "0000_good_screwball",
       "breakpoints": true
     }
   ]

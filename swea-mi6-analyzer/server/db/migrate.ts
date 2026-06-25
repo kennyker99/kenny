@@ -1,10 +1,9 @@
-import pg from "pg";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
+import mysql from "mysql2/promise";
+import { drizzle } from "drizzle-orm/mysql2";
+import { migrate } from "drizzle-orm/mysql2/migrator";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const { Pool } = pg;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function runMigrations() {
@@ -13,18 +12,13 @@ async function runMigrations() {
     return;
   }
 
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
-  });
-
-  const db = drizzle(pool);
-  // In production dist/migrate.js → __dirname is dist/, drizzle/ is copied there during build
+  const connection = await mysql.createConnection(process.env.DATABASE_URL);
+  const db = drizzle(connection);
   const migrationsFolder = path.resolve(__dirname, "drizzle");
   console.log("Running migrations from:", migrationsFolder);
   await migrate(db, { migrationsFolder });
   console.log("Migrations complete");
-  await pool.end();
+  await connection.end();
 }
 
 runMigrations().catch((err) => {
