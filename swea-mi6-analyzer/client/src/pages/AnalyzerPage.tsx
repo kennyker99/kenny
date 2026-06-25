@@ -131,17 +131,17 @@ export default function AnalyzerPage() {
               >
                 {TIMEFRAMES.map((tf) => <option key={tf} value={tf}>{tf}</option>)}
               </select>
-              <div className="flex items-center gap-1.5 text-xs text-slate-600 font-mono">
+              <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
                 <Calendar size={11} />
                 {new Date().toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button onClick={handleReset} className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-white/10 text-slate-500 hover:text-slate-300 hover:bg-slate-800 text-xs transition-all duration-150 active:scale-[0.97]">
+              <button onClick={handleReset} className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-white/10 text-slate-400 hover:text-slate-300 hover:bg-slate-800 text-xs transition-all duration-150 active:scale-[0.97]">
                 <RotateCcw size={12} />
                 <span className="hidden sm:inline">重置</span>
               </button>
-              <button onClick={handleExportPDF} className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-white/10 text-slate-500 hover:text-slate-300 hover:bg-slate-800 text-xs transition-all duration-150 active:scale-[0.97]">
+              <button onClick={handleExportPDF} className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-white/10 text-slate-400 hover:text-slate-300 hover:bg-slate-800 text-xs transition-all duration-150 active:scale-[0.97]">
                 <Download size={12} />
                 <span className="hidden sm:inline">导出 PDF</span>
               </button>
@@ -165,7 +165,7 @@ export default function AnalyzerPage() {
             <div className="rounded-xl border border-white/8 bg-slate-800/30 p-4">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs font-semibold text-amber-500/80" style={{ fontFamily: "'Sora', sans-serif" }}>整体行情图表</span>
-                <span className="text-[10px] text-slate-600">（可选）上传当前行情截图，随记录一起保存</span>
+                <span className="text-[10px] text-slate-400">（可选）上传当前行情截图，随记录一起保存</span>
               </div>
               {chartImage ? (
                 <div className="relative group rounded-lg overflow-hidden border border-white/10">
@@ -182,7 +182,7 @@ export default function AnalyzerPage() {
               ) : (
                 <button
                   onClick={() => chartFileRef.current?.click()}
-                  className="w-full flex items-center justify-center gap-2 py-5 rounded-lg border border-dashed border-white/10 text-slate-600 hover:border-amber-500/30 hover:text-amber-500/60 text-sm transition-all duration-150"
+                  className="w-full flex items-center justify-center gap-2 py-5 rounded-lg border border-dashed border-white/10 text-slate-400 hover:border-amber-500/30 hover:text-amber-500/60 text-sm transition-all duration-150"
                 >
                   <ImagePlus size={16} />
                   <span>点击上传整体行情图表截图</span>
@@ -199,7 +199,7 @@ export default function AnalyzerPage() {
                   价格行为 · Price Action
                 </h2>
                 <div className="flex-1 h-px bg-white/5" />
-                <span className="text-[10px] text-slate-600">3 项指标</span>
+                <span className="text-[10px] text-slate-400">3 项指标</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {PA_INDICATORS.map((id, i) => (
@@ -222,7 +222,7 @@ export default function AnalyzerPage() {
                   技术分析 · Technical Analysis
                 </h2>
                 <div className="flex-1 h-px bg-white/5" />
-                <span className="text-[10px] text-slate-600">3 项指标</span>
+                <span className="text-[10px] text-slate-400">3 项指标</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {TA_INDICATORS.map((id, i) => (
@@ -239,7 +239,7 @@ export default function AnalyzerPage() {
 
             {/* Notes */}
             <div>
-              <label className="block text-xs font-semibold text-slate-500 mb-2" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <label className="block text-xs font-semibold text-slate-400 mb-2" style={{ fontFamily: "'Sora', sans-serif" }}>
                 交易备注 <span className="text-slate-700 font-normal">（可选）</span>
               </label>
               <textarea
@@ -264,7 +264,7 @@ export default function AnalyzerPage() {
 
               {/* Quick summary */}
               <div className="rounded-xl border border-white/8 bg-slate-800/30 p-4 space-y-2">
-                <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">指标状态摘要</h3>
+                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">指标状态摘要</h3>
                 <div className="space-y-2">
                   {[...PA_INDICATORS, ...TA_INDICATORS].map((id) => {
                     const def = INDICATOR_DEFINITIONS[id];
@@ -272,14 +272,14 @@ export default function AnalyzerPage() {
                     return (
                       <div key={id} className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                          <span className="text-[11px] text-slate-500 truncate block">{def.name}</span>
+                          <span className="text-[11px] text-slate-400 truncate block">{def.name}</span>
                           {val.notes && (
                             <span className="text-[10px] text-slate-700 truncate block">{val.notes}</span>
                           )}
                         </div>
                         <span className={`text-[11px] font-bold flex-shrink-0 ${
                           val.state === "bullish" ? "text-emerald-400" :
-                          val.state === "bearish" ? "text-red-400" : "text-slate-600"
+                          val.state === "bearish" ? "text-red-400" : "text-slate-400"
                         }`}>
                           {val.state === "bullish" ? "▲" : val.state === "bearish" ? "▼" : "—"}
                         </span>
@@ -292,7 +292,7 @@ export default function AnalyzerPage() {
               {/* MI6 Signal Rule */}
               <div className="rounded-xl border border-amber-500/15 bg-amber-500/5 p-4">
                 <h3 className="text-[10px] font-bold text-amber-500/80 mb-2.5 tracking-wider">MI6 信号触发标准</h3>
-                <div className="space-y-1.5 text-[11px] text-slate-500">
+                <div className="space-y-1.5 text-[11px] text-slate-400">
                   <div className="flex gap-2"><span className="text-emerald-400">●</span><span>5-6 项看涨 → 强烈多头 ★★★</span></div>
                   <div className="flex gap-2"><span className="text-emerald-600">●</span><span>4 项看涨 → 多头信号 ★★</span></div>
                   <div className="flex gap-2"><span className="text-red-400">●</span><span>5-6 项看跌 → 强烈空头 ★★★</span></div>
@@ -312,7 +312,7 @@ export default function AnalyzerPage() {
             <VerdictCard verdict={verdict} />
             <div className="mt-4 rounded-xl border border-amber-500/15 bg-amber-500/5 p-4">
               <h3 className="text-[10px] font-bold text-amber-500/80 mb-2 tracking-wider">MI6 信号触发标准</h3>
-              <div className="space-y-1.5 text-[11px] text-slate-500">
+              <div className="space-y-1.5 text-[11px] text-slate-400">
                 <div className="flex gap-2"><span className="text-emerald-400">●</span><span>5-6 项看涨 → 强烈多头 ★★★</span></div>
                 <div className="flex gap-2"><span className="text-emerald-600">●</span><span>4 项看涨 → 多头信号 ★★</span></div>
                 <div className="flex gap-2"><span className="text-red-400">●</span><span>5-6 项看跌 → 强烈空头 ★★★</span></div>
@@ -328,7 +328,7 @@ export default function AnalyzerPage() {
         >
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <span className={`text-sm font-bold ${verdictColorClass}`}>{SIGNAL_LABELS[verdict.signal]}</span>
-            <span className="text-xs text-slate-600 font-mono">↑{verdict.bullishCount} ↓{verdict.bearishCount}</span>
+            <span className="text-xs text-slate-400 font-mono">↑{verdict.bullishCount} ↓{verdict.bearishCount}</span>
             <span className="text-xs text-amber-500/70 font-mono">{verdict.confidence}%</span>
           </div>
           <div className="flex items-center gap-2">
@@ -340,7 +340,7 @@ export default function AnalyzerPage() {
                 return <div key={i} className={`w-2 h-2 rounded-full ${dotColor}`} />;
               })}
             </div>
-            {mobileVerdictOpen ? <ChevronDown size={15} className="text-slate-500" /> : <ChevronUp size={15} className="text-slate-500" />}
+            {mobileVerdictOpen ? <ChevronDown size={15} className="text-slate-400" /> : <ChevronUp size={15} className="text-slate-400" />}
           </div>
         </button>
       </div>

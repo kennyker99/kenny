@@ -112,12 +112,12 @@ export default function IndicatorCard({ indicator, value, onChange, index }: Ind
                 <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border font-mono tracking-wider ${CATEGORY_STYLE[indicator.category]}`}>
                   {indicator.category}
                 </span>
-                <span className="text-[10px] text-slate-600 font-mono">#{index + 1}</span>
+                <span className="text-[10px] text-slate-400 font-mono">#{index + 1}</span>
               </div>
               <h3 className="text-sm font-bold text-slate-100 leading-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
                 {indicator.name}
               </h3>
-              <p className="text-[11px] text-slate-500 leading-tight mt-0.5">{indicator.nameEn}</p>
+              <p className="text-[11px] text-slate-400 leading-tight mt-0.5">{indicator.nameEn}</p>
             </div>
 
             {/* Current state pill */}
@@ -166,7 +166,7 @@ export default function IndicatorCard({ indicator, value, onChange, index }: Ind
             rows={3}
             className="
               w-full px-3 py-2.5 rounded-lg border border-white/8 bg-slate-900/60
-              text-xs text-slate-200 placeholder:text-slate-600
+              text-xs text-slate-200 placeholder:text-slate-500
               focus:outline-none focus:ring-1 focus:ring-amber-500/40 focus:border-amber-500/30
               resize-none transition-colors duration-150
               leading-relaxed
@@ -207,7 +207,7 @@ export default function IndicatorCard({ indicator, value, onChange, index }: Ind
               onClick={() => fileInputRef.current?.click()}
               className="
                 w-full flex items-center justify-center gap-2 py-2.5 rounded-lg
-                border border-dashed border-white/10 text-slate-600
+                border border-dashed border-white/10 text-slate-400
                 hover:border-amber-500/30 hover:text-amber-500/70
                 text-xs transition-all duration-150
               "
@@ -229,7 +229,7 @@ export default function IndicatorCard({ indicator, value, onChange, index }: Ind
         <div className="border-t border-white/5">
           <button
             onClick={() => setShowRef(!showRef)}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-slate-600 hover:text-slate-400 transition-colors duration-150"
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-slate-400 hover:text-slate-200 transition-colors duration-150"
           >
             <Info size={11} />
             <span>判断标准参考</span>
@@ -239,9 +239,9 @@ export default function IndicatorCard({ indicator, value, onChange, index }: Ind
 
           {showRef && (
             <div className="px-4 pb-4 space-y-2 bg-slate-900/40">
-              <p className="text-[11px] text-slate-500 italic">{indicator.description}</p>
+              <p className="text-[11px] text-slate-400 italic">{indicator.description}</p>
               {indicator.reference.map((ref, i) => (
-                <div key={i} className="flex gap-2 text-[11px] text-slate-500">
+                <div key={i} className="flex gap-2 text-[11px] text-slate-400">
                   <span className="text-amber-500/60 flex-shrink-0 font-mono">{String(i + 1).padStart(2, "0")}</span>
                   <span>{ref}</span>
                 </div>

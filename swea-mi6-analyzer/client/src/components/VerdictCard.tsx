@@ -85,7 +85,7 @@ export default function VerdictCard({ verdict, compact = false }: VerdictCardPro
             </h2>
 
             {!compact && (
-              <p className="text-xs text-slate-500 mt-1 leading-relaxed">{verdict.description}</p>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">{verdict.description}</p>
             )}
           </div>
         </div>
@@ -112,13 +112,13 @@ export default function VerdictCard({ verdict, compact = false }: VerdictCardPro
             <div className="text-2xl font-bold text-slate-400 leading-none font-mono" style={{ fontFamily: "'Fira Code', monospace" }}>
               {verdict.neutralCount}
             </div>
-            <div className="text-[10px] text-slate-500/70 mt-1 font-semibold tracking-wider">中性 NEU</div>
+            <div className="text-[10px] text-slate-400/70 mt-1 font-semibold tracking-wider">中性 NEU</div>
           </div>
         </div>
 
         {/* Net score bar */}
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-[10px] text-slate-600 font-mono">
+          <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
             <span>← 空头</span>
             <span className={`font-bold text-xs ${colorClass}`}>
               净值 {verdict.netScore > 0 ? "+" : ""}{verdict.netScore}
@@ -163,7 +163,7 @@ export default function VerdictCard({ verdict, compact = false }: VerdictCardPro
             <span className="text-xs font-bold font-mono text-amber-400" style={{ fontFamily: "'Fira Code', monospace" }}>
               {verdict.confidence}%
             </span>
-            <span className="text-[10px] text-slate-600">可信度</span>
+            <span className="text-[10px] text-slate-400">可信度</span>
           </div>
         </div>
 

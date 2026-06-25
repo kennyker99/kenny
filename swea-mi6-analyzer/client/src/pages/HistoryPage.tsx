@@ -86,7 +86,7 @@ export default function HistoryPage() {
               className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-semibold transition-all duration-150 border-b-2 ${
                 activeTab === "records"
                   ? "border-amber-400 text-amber-400 bg-amber-400/5"
-                  : "border-transparent text-slate-500 hover:text-slate-300"
+                  : "border-transparent text-slate-400 hover:text-slate-300"
               }`}
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
@@ -103,7 +103,7 @@ export default function HistoryPage() {
               className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-semibold transition-all duration-150 border-b-2 ${
                 activeTab === "stats"
                   ? "border-amber-400 text-amber-400 bg-amber-400/5"
-                  : "border-transparent text-slate-500 hover:text-slate-300"
+                  : "border-transparent text-slate-400 hover:text-slate-300"
               }`}
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
@@ -116,13 +116,13 @@ export default function HistoryPage() {
           {activeTab === "records" && (
             <div className="flex flex-wrap gap-2 py-2.5">
               <div className="relative">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
+                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
                   value={searchPair}
                   onChange={(e) => setSearchPair(e.target.value)}
                   placeholder="搜索交易对..."
-                  className="w-full h-8 pl-8 pr-3 rounded-lg border border-white/10 bg-slate-800 text-slate-200 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-amber-500/40 placeholder:text-slate-600"
+                  className="w-full h-8 pl-8 pr-3 rounded-lg border border-white/10 bg-slate-800 text-slate-200 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-amber-500/40 placeholder:text-slate-400"
                 />
               </div>
               <select
@@ -140,7 +140,7 @@ export default function HistoryPage() {
               >
                 {signalOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
-              <div className="flex items-center text-[11px] text-slate-600 font-mono px-1 self-center">
+              <div className="flex items-center text-[11px] text-slate-400 font-mono px-1 self-center">
                 {filtered.length} / {records.length} 条
               </div>
             </div>
@@ -252,13 +252,13 @@ function RecordRow({
           >
             {record.pair}
           </div>
-          <div className="text-[10px] text-slate-600 font-mono">{record.timeframe}</div>
+          <div className="text-[10px] text-slate-400 font-mono">{record.timeframe}</div>
         </div>
 
         {/* Signal */}
         <div className="flex-shrink-0">
           <div className={`text-sm font-bold ${colorClass}`}>{SIGNAL_LABELS[record.verdict.signal]}</div>
-          <div className="text-[10px] text-slate-600 font-mono">{record.verdict.confidence}% 可信度</div>
+          <div className="text-[10px] text-slate-400 font-mono">{record.verdict.confidence}% 可信度</div>
         </div>
 
         {/* Score dots */}
@@ -269,7 +269,7 @@ function RecordRow({
             else if (i < record.verdict.bullishCount + record.verdict.bearishCount) dotClass = "bg-red-500";
             return <div key={i} className={`w-2 h-2 rounded-full ${dotClass}`} />;
           })}
-          <span className="text-[10px] text-slate-600 ml-1 font-mono">
+          <span className="text-[10px] text-slate-400 ml-1 font-mono">
             ↑{record.verdict.bullishCount} ↓{record.verdict.bearishCount}
           </span>
         </div>
@@ -287,7 +287,7 @@ function RecordRow({
         <div className="flex-1" />
 
         {/* Date */}
-        <div className="hidden md:flex items-center gap-1.5 text-[11px] text-slate-600 flex-shrink-0">
+        <div className="hidden md:flex items-center gap-1.5 text-[11px] text-slate-400 flex-shrink-0">
           <Calendar size={10} />
           {date.toLocaleDateString("zh-CN")}
           <Clock size={10} className="ml-1" />
@@ -317,7 +317,7 @@ function RecordRow({
                     className={`flex-shrink-0 ${
                       val.state === "bullish" ? "text-emerald-400"
                       : val.state === "bearish" ? "text-red-400"
-                      : "text-slate-500"
+                      : "text-slate-400"
                     }`}
                   >
                     {val.state === "bullish" ? <TrendingUp size={12} />
@@ -326,7 +326,7 @@ function RecordRow({
                   </span>
                 </div>
                 {val.notes
-                  ? <p className="text-[11px] text-slate-500 leading-relaxed">{val.notes}</p>
+                  ? <p className="text-[11px] text-slate-400 leading-relaxed">{val.notes}</p>
                   : <p className="text-[11px] text-slate-700 italic">无备注</p>
                 }
                 {val.imageData && (
@@ -345,7 +345,7 @@ function RecordRow({
           </div>
           {record.notes && (
             <div className="rounded-lg border border-white/8 bg-slate-900/40 p-3">
-              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">交易备注</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">交易备注</span>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">{record.notes}</p>
             </div>
           )}
@@ -388,19 +388,19 @@ function RecordDetailModal({
               >
                 {record.pair}
               </span>
-              <span className="text-sm text-slate-500 font-mono">{record.timeframe}</span>
+              <span className="text-sm text-slate-400 font-mono">{record.timeframe}</span>
               <span className={`text-sm font-bold ${colorClass}`}>
                 {SIGNAL_LABELS[record.verdict.signal]}
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-600 mt-1">
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-1">
               <Calendar size={10} />
               {date.toLocaleString("zh-CN")}
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-slate-800 text-slate-500 hover:text-slate-300 transition-colors"
+            className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-300 transition-colors"
           >
             <X size={18} />
           </button>
@@ -423,7 +423,7 @@ function RecordDetailModal({
                 >
                   {SIGNAL_LABELS[record.verdict.signal]}
                 </div>
-                <div className="text-xs text-slate-500 mt-1">{record.verdict.description}</div>
+                <div className="text-xs text-slate-400 mt-1">{record.verdict.description}</div>
               </div>
               <div className="text-right">
                 <div
@@ -432,7 +432,7 @@ function RecordDetailModal({
                 >
                   {record.verdict.confidence}%
                 </div>
-                <div className="text-[10px] text-slate-600">可信度</div>
+                <div className="text-[10px] text-slate-400">可信度</div>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-3 mt-4">
@@ -446,7 +446,7 @@ function RecordDetailModal({
               </div>
               <div className="text-center p-2 rounded-lg bg-slate-700/30 border border-slate-600/20">
                 <div className="text-xl font-bold text-slate-400 font-mono">{record.verdict.neutralCount}</div>
-                <div className="text-[10px] text-slate-500/60 mt-0.5">中性</div>
+                <div className="text-[10px] text-slate-400/60 mt-0.5">中性</div>
               </div>
             </div>
           </div>
@@ -454,7 +454,7 @@ function RecordDetailModal({
           {/* Chart image */}
           {record.chartImage && (
             <div>
-              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">整体行情图表</h3>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">整体行情图表</h3>
               <button
                 className="w-full rounded-xl overflow-hidden border border-white/10 hover:border-amber-500/30 transition-colors relative group"
                 onClick={() => onImageClick(record.chartImage!)}
@@ -469,7 +469,7 @@ function RecordDetailModal({
 
           {/* Indicator details */}
           <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">6 大指标详情</h3>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">6 大指标详情</h3>
             <div className="space-y-2">
               {Object.entries(record.indicators).map(([key, val]) => (
                 <div key={key} className="rounded-xl border border-white/8 bg-slate-800/30 p-3">
@@ -492,14 +492,14 @@ function RecordDetailModal({
                           className={`text-[10px] font-bold ${
                             val.state === "bullish" ? "text-emerald-400"
                             : val.state === "bearish" ? "text-red-400"
-                            : "text-slate-500"
+                            : "text-slate-400"
                           }`}
                         >
                           {val.state === "bullish" ? "看涨" : val.state === "bearish" ? "看跌" : "中性"}
                         </span>
                       </div>
                       {val.notes
-                        ? <p className="text-xs text-slate-500 mt-1 leading-relaxed">{val.notes}</p>
+                        ? <p className="text-xs text-slate-400 mt-1 leading-relaxed">{val.notes}</p>
                         : <p className="text-xs text-slate-700 italic mt-1">无备注</p>
                       }
                     </div>
@@ -523,7 +523,7 @@ function RecordDetailModal({
           {/* Notes */}
           {record.notes && (
             <div className="rounded-xl border border-white/8 bg-slate-800/30 p-4">
-              <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">交易备注</h3>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">交易备注</h3>
               <p className="text-sm text-slate-400 leading-relaxed">{record.notes}</p>
             </div>
           )}

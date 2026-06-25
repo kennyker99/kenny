@@ -288,14 +288,14 @@ function StatCard({
         <Icon size={16} style={{ color }} />
       </div>
       <div className="min-w-0">
-        <div className="text-[11px] text-slate-500 font-medium">{label}</div>
+        <div className="text-[11px] text-slate-400 font-medium">{label}</div>
         <div
           className="text-xl font-bold font-mono mt-0.5 leading-none"
           style={{ color, fontFamily: "'Fira Code', monospace" }}
         >
           {value}
         </div>
-        {sub && <div className="text-[10px] text-slate-600 mt-1">{sub}</div>}
+        {sub && <div className="text-[10px] text-slate-400 mt-1">{sub}</div>}
       </div>
     </div>
   );
@@ -344,7 +344,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
     return (
       <div className="rounded-2xl border border-white/8 bg-slate-800/20 p-10 text-center">
         <BarChart2 size={36} className="mx-auto mb-3 text-slate-700" />
-        <p className="text-sm text-slate-600">暂无数据，保存分析记录后即可查看统计图表</p>
+        <p className="text-sm text-slate-400">暂无数据，保存分析记录后即可查看统计图表</p>
       </div>
     );
   }
@@ -353,7 +353,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
     <div className="space-y-5">
       {/* ── Top bar: Export Button ── */}
       <div className="flex items-center justify-between">
-        <div className="text-xs text-slate-600">
+        <div className="text-xs text-slate-400">
           共 <span className="font-mono font-bold text-slate-400">{records.length}</span> 条记录
         </div>
         <button
@@ -418,7 +418,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
               >
                 各交易对信号分布
               </h3>
-              <p className="text-[11px] text-slate-600 mt-0.5">每个交易对的多头/空头/混合信号次数</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">每个交易对的多头/空头/混合信号次数</p>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={220}>
@@ -459,7 +459,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
             >
               信号类型占比
             </h3>
-            <p className="text-[11px] text-slate-600 mt-0.5">全部记录的信号分布</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">全部记录的信号分布</p>
           </div>
           <ResponsiveContainer width="100%" height={180}>
             <PieChart>
@@ -505,7 +505,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
               <div key={d.name} className="flex items-center justify-between text-[11px]">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                  <span className="text-slate-500">{d.name}</span>
+                  <span className="text-slate-400">{d.name}</span>
                 </div>
                 <span className="font-mono font-bold text-slate-300">{d.value}</span>
               </div>
@@ -524,7 +524,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
             >
               可信度 & 净值分趋势
             </h3>
-            <p className="text-[11px] text-slate-600 mt-0.5">最近 30 条记录的信号强度变化（金线=可信度，蓝线=净值分）</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">最近 30 条记录的信号强度变化（金线=可信度，蓝线=净值分）</p>
           </div>
           <select
             value={trendPair}
@@ -606,7 +606,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
             >
               各交易对平均可信度
             </h3>
-            <p className="text-[11px] text-slate-600 mt-0.5">信号强度越高，代表该交易对的分析结果越一致</p>
+            <p className="text-[11px] text-slate-400 mt-0.5">信号强度越高，代表该交易对的分析结果越一致</p>
           </div>
           <div className="space-y-2.5">
             {pairStats.map((ps) => (
@@ -639,7 +639,7 @@ function DashboardInner({ records }: { records: AnalysisRecord[] }) {
                 >
                   {ps.avgConfidence}%
                 </div>
-                <div className="w-8 text-[10px] text-slate-600 flex-shrink-0 text-right">
+                <div className="w-8 text-[10px] text-slate-400 flex-shrink-0 text-right">
                   ×{ps.total}
                 </div>
               </div>
