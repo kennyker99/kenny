@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 230" fill="none">
+  <defs>
+    <linearGradient id="hexFill" x1="100" y1="10" x2="100" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#e8e8f0"/>
+      <stop offset="40%" stop-color="#c8c8e0"/>
+      <stop offset="100%" stop-color="#6a5fa0"/>
+    </linearGradient>
+    <linearGradient id="hexStroke" x1="0" y1="0" x2="200" y2="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8888cc"/>
+      <stop offset="50%" stop-color="#1a1a4a"/>
+      <stop offset="100%" stop-color="#4444aa"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Hexagon -->
+  <polygon
+    points="100,8 192,58 192,172 100,222 8,172 8,58"
+    fill="url(#hexFill)"
+    stroke="url(#hexStroke)"
+    stroke-width="6"
+  />
+  <!-- Inner border glow -->
+  <polygon
+    points="100,16 184,64 184,168 100,214 16,168 16,64"
+    fill="none"
+    stroke="#aaaadd"
+    stroke-width="1"
+    opacity="0.4"
+  />
+  <!-- Text: MI6盈率翻倍 -->
+  <text
+    x="100" y="108"
+    text-anchor="middle"
+    font-family="'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif"
+    font-size="20"
+    font-weight="700"
+    fill="#1a1a3a"
+    letter-spacing="1"
+  >MI6盈率翻倍</text>
+  <!-- Text: 6大策略 -->
+  <text
+    x="100" y="152"
+    text-anchor="middle"
+    font-family="'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif"
+    font-size="38"
+    font-weight="900"
+    fill="#1a1a3a"
+    letter-spacing="2"
+  >6大策略</text>
+</svg>

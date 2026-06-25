@@ -13,8 +13,7 @@ import {
   X,
 } from "lucide-react";
 
-const LOGO_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663760427773/HQcFGvWtUrkYo8K9xZ8psQ/mi6-logo-mLcQJkZGaxesX6yuwDt3Ls.webp";
+const LOGO_URL = "/logo.svg";
 
 const NAV_ITEMS = [
   {
@@ -75,7 +74,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <img
             src={LOGO_URL}
             alt="SWEA MI6"
-            className="w-8 h-8 flex-shrink-0"
+            className="w-10 h-10 flex-shrink-0"
           />
           {!collapsed && (
             <div className="min-w-0">
