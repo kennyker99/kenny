@@ -26,12 +26,15 @@ export async function apiSaveRecord(record: AnalysisRecord): Promise<void> {
 }
 
 export async function apiUpdateRecord(record: AnalysisRecord): Promise<void> {
-  const res = await fetch(BASE, {
-    method: "POST",
+  const res = await fetch(`${BASE}/${record.id}`, {
+    method: "PUT",
     headers: { "Content-Type": "application/json", ...authHeaders() },
     body: JSON.stringify(record),
   });
-  if (!res.ok) throw new Error("Failed to update record");
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || `HTTP ${res.status}`);
+  }
 }
 
 export async function apiDeleteRecord(id: string): Promise<void> {

@@ -52,8 +52,8 @@ export default function HistoryPage() {
       if (selectedRecord?.id === updated.id) setSelectedRecord(updated);
       setEditingRecord(null);
       toast.success("记录已更新");
-    } catch {
-      toast.error("更新失败，请重试");
+    } catch (err) {
+      toast.error(`更新失败: ${err instanceof Error ? err.message : "请重试"}`);
     }
   };
 

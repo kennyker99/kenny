@@ -19,7 +19,7 @@ router.get("/", async (_req, res) => {
   }
 });
 
-// POST /api/records — upsert via insert then update on duplicate key
+// POST /api/records — insert new record
 router.post("/", async (req, res) => {
   if (!db) return noDb(req, res);
   const { id, pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord } = req.body;
@@ -29,20 +29,24 @@ router.post("/", async (req, res) => {
       .values({ id, pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord });
     res.json({ id });
   } catch (err: any) {
-    if (err?.code === "ER_DUP_ENTRY") {
-      try {
-        await db!
-          .update(schema.analysisRecords)
-          .set({ pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord })
-          .where(eq(schema.analysisRecords.id, id));
-        return res.json({ id });
-      } catch (e) {
-        console.error(e);
-        return res.status(500).json({ error: "Failed to update record" });
-      }
-    }
-    console.error(err);
-    res.status(500).json({ error: "Failed to save record" });
+    console.error("POST /api/records error:", err?.code, err?.message);
+    res.status(500).json({ error: err?.message || "Failed to save record" });
+  }
+});
+
+// PUT /api/records/:id — update existing record
+router.put("/:id", async (req, res) => {
+  if (!db) return noDb(req, res);
+  const { pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord } = req.body;
+  try {
+    await db!
+      .update(schema.analysisRecords)
+      .set({ pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord })
+      .where(eq(schema.analysisRecords.id, req.params.id));
+    res.json({ id: req.params.id });
+  } catch (err: any) {
+    console.error("PUT /api/records/:id error:", err?.code, err?.message);
+    res.status(500).json({ error: err?.message || "Failed to update record" });
   }
 });
 
