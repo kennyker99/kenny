@@ -1,7 +1,7 @@
-import { mysqlTable, text, timestamp, json } from "drizzle-orm/mysql-core";
+import { mysqlTable, varchar, text, timestamp, json } from "drizzle-orm/mysql-core";
 
 export const analysisRecords = mysqlTable("analysis_records", {
-  id:         text("id").primaryKey(),
+  id:         varchar("id", { length: 21 }).primaryKey(),
   pair:       text("pair").notNull(),
   timeframe:  text("timeframe").notNull(),
   date:       text("date").notNull(),

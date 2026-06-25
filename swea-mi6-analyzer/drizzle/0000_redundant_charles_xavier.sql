@@ -1,5 +1,5 @@
 CREATE TABLE `analysis_records` (
-	`id` text NOT NULL,
+	`id` varchar(21) NOT NULL,
 	`pair` text NOT NULL,
 	`timeframe` text NOT NULL,
 	`date` text NOT NULL,

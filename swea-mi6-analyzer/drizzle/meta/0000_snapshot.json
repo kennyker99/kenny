@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "2fce0f3a-4703-4692-a56a-928da2f3d779",
+  "id": "89b26d80-d2cd-498c-9639-9b5706003115",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "analysis_records": {
@@ -9,7 +9,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
