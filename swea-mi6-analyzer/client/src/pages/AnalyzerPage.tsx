@@ -18,6 +18,7 @@ import {
   getVerdictColor,
   type AnalysisRecord,
   type IndicatorValue,
+  type TradeRecord,
 } from "@/lib/swea-data";
 import { apiSaveRecord } from "@/lib/api";
 import IndicatorCard from "@/components/IndicatorCard";
@@ -46,6 +47,7 @@ export default function AnalyzerPage() {
   const [mobileVerdictOpen, setMobileVerdictOpen] = useState(false);
   const [chartLightbox, setChartLightbox] = useState(false);
   const chartFileRef = useRef<HTMLInputElement>(null);
+  const [tradeRecord, setTradeRecord] = useState<TradeRecord>({ status: "open" });
 
   const activePair = showCustomPair && customPair ? customPair.toUpperCase() : pair;
   const verdict = calculateVerdict(indicators);
@@ -61,6 +63,7 @@ export default function AnalyzerPage() {
     setIndicators(createDefaultIndicators());
     setNotes("");
     setChartImage(undefined);
+    setTradeRecord({ status: "open" });
     toast.info("已重置所有指标");
   };
 
@@ -74,6 +77,7 @@ export default function AnalyzerPage() {
       verdict,
       chartImage,
       notes: notes.trim() || undefined,
+      tradeRecord: (tradeRecord.entryPrice || tradeRecord.takeProfit || tradeRecord.stopLoss || tradeRecord.actualPnl) ? tradeRecord : undefined,
     };
     try {
       await apiSaveRecord(record);
@@ -253,6 +257,64 @@ export default function AnalyzerPage() {
                 rows={3}
                 className="w-full px-4 py-3 rounded-xl border border-white/8 bg-slate-800/40 text-sm text-slate-200 placeholder:text-slate-700 focus:outline-none focus:ring-1 focus:ring-amber-500/30 resize-none"
               />
+            </div>
+
+            {/* Trade Record */}
+            <div className="rounded-xl border border-teal-500/25 bg-teal-500/5 p-4">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-bold text-teal-400" style={{ fontFamily: "'Sora', sans-serif" }}>交易记录</span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setTradeRecord((p) => ({ ...p, status: "open" }))}
+                    className={`text-[10px] font-bold px-2.5 py-1 rounded-full transition-all ${
+                      tradeRecord.status === "open"
+                        ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                        : "text-slate-600 border border-white/8 hover:text-slate-400"
+                    }`}
+                  >
+                    进行中
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTradeRecord((p) => ({ ...p, status: "closed" }))}
+                    className={`text-[10px] font-bold px-2.5 py-1 rounded-full transition-all ${
+                      tradeRecord.status === "closed"
+                        ? "bg-teal-500/20 text-teal-400 border border-teal-500/30"
+                        : "text-slate-600 border border-white/8 hover:text-slate-400"
+                    }`}
+                  >
+                    已完结
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {([
+                  { key: "entryPrice", label: "入场价位", placeholder: "0.00000" },
+                  { key: "takeProfit", label: "止盈 (TP)", placeholder: "0.00000" },
+                  { key: "stopLoss",   label: "止损 (SL)", placeholder: "0.00000" },
+                  { key: "actualPnl",  label: "实际盈利",  placeholder: "+0.00" },
+                ] as const).map(({ key, label, placeholder }) => (
+                  <div key={key}>
+                    <label className="block text-[10px] text-slate-500 mb-1.5">{label}</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={tradeRecord[key] ?? ""}
+                      onChange={(e) => setTradeRecord((p) => ({
+                        ...p,
+                        [key]: e.target.value === "" ? undefined : parseFloat(e.target.value),
+                      }))}
+                      placeholder={placeholder}
+                      className={`w-full px-3 py-2 rounded-lg border bg-slate-800/60 text-sm font-mono focus:outline-none focus:ring-1 transition-colors placeholder:text-slate-700
+                        ${key === "stopLoss" ? "text-red-400 border-red-500/20 focus:ring-red-500/30" :
+                          key === "actualPnl" ? "text-emerald-400 border-emerald-500/20 focus:ring-emerald-500/30" :
+                          "text-slate-200 border-white/8 focus:ring-teal-500/30"}
+                      `}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

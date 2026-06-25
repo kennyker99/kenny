@@ -45,7 +45,8 @@ function rowToRecord(row: Record<string, unknown>): AnalysisRecord {
     date:       row.date as string,
     indicators: row.indicators as AnalysisRecord["indicators"],
     verdict:    row.verdict as AnalysisRecord["verdict"],
-    chartImage: row.chart_image as string | undefined,
-    notes:      row.notes as string | undefined,
+    chartImage:   row.chart_image as string | undefined,
+    notes:        row.notes as string | undefined,
+    tradeRecord:  row.trade_record as AnalysisRecord["tradeRecord"] | undefined,
   };
 }

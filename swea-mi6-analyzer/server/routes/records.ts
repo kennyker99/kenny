@@ -22,18 +22,18 @@ router.get("/", async (_req, res) => {
 // POST /api/records — upsert via insert then update on duplicate key
 router.post("/", async (req, res) => {
   if (!db) return noDb(req, res);
-  const { id, pair, timeframe, date, indicators, verdict, chartImage, notes } = req.body;
+  const { id, pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord } = req.body;
   try {
     await db
       .insert(schema.analysisRecords)
-      .values({ id, pair, timeframe, date, indicators, verdict, chartImage, notes });
+      .values({ id, pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord });
     res.json({ id });
   } catch (err: any) {
     if (err?.code === "ER_DUP_ENTRY") {
       try {
         await db!
           .update(schema.analysisRecords)
-          .set({ pair, timeframe, date, indicators, verdict, chartImage, notes })
+          .set({ pair, timeframe, date, indicators, verdict, chartImage, notes, tradeRecord })
           .where(eq(schema.analysisRecords.id, id));
         return res.json({ id });
       } catch (e) {

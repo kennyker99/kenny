@@ -26,6 +26,15 @@ export interface AnalysisRecord {
   verdict: VerdictResult;
   chartImage?: string;   // optional overall chart screenshot (base64)
   notes?: string;
+  tradeRecord?: TradeRecord;
+}
+
+export interface TradeRecord {
+  entryPrice?: number;
+  takeProfit?: number;
+  stopLoss?: number;
+  actualPnl?: number;
+  status?: "open" | "closed";
 }
 
 export interface VerdictResult {

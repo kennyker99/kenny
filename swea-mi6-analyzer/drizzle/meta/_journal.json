@@ -9,5 +9,12 @@
       "tag": "0000_redundant_charles_xavier",
       "breakpoints": true
     }
+    ,{
+      "idx": 1,
+      "version": "5",
+      "when": 1782500000000,
+      "tag": "0001_add_trade_record",
+      "breakpoints": true
+    }
   ]
 }

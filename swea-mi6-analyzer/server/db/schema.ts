@@ -7,9 +7,10 @@ export const analysisRecords = mysqlTable("analysis_records", {
   date:       text("date").notNull(),
   indicators: json("indicators").notNull(),
   verdict:    json("verdict").notNull(),
-  chartImage: text("chart_image"),
-  notes:      text("notes"),
-  createdAt:  timestamp("created_at").defaultNow(),
+  chartImage:   text("chart_image"),
+  notes:        text("notes"),
+  tradeRecord:  json("trade_record"),
+  createdAt:    timestamp("created_at").defaultNow(),
 });
 
 export type AnalysisRecordRow = typeof analysisRecords.$inferSelect;
