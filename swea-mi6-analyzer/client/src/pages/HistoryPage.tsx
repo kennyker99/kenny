@@ -2,17 +2,17 @@
 // Design: Financial Professional Deep Blue
 // Features: Tab-based layout (Records / Stats Dashboard), filter, detail modal, image preview
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Search, Trash2, TrendingUp, TrendingDown, Minus,
-  Calendar, Clock, X, ZoomIn, FileText, BarChart2,
+  Calendar, Clock, X, ZoomIn, FileText, BarChart2, Pencil, Check,
 } from "lucide-react";
 import {
   getVerdictColor,
   TIMEFRAMES,
   type AnalysisRecord,
 } from "@/lib/swea-data";
-import { apiLoadRecords, apiDeleteRecord } from "@/lib/api";
+import { apiLoadRecords, apiDeleteRecord, apiUpdateRecord } from "@/lib/api";
 import { toast } from "sonner";
 import StatsDashboard from "@/components/StatsDashboard";
 
@@ -46,6 +46,21 @@ export default function HistoryPage() {
   useEffect(() => {
     apiLoadRecords().then(setRecords).catch(() => toast.error("加载记录失败"));
   }, []);
+
+  const handleUpdatePnl = async (record: AnalysisRecord, pnl: number | undefined) => {
+    const updated: AnalysisRecord = {
+      ...record,
+      tradeRecord: { ...record.tradeRecord, actualPnl: pnl },
+    };
+    try {
+      await apiUpdateRecord(updated);
+      setRecords((prev) => prev.map((r) => r.id === updated.id ? updated : r));
+      if (selectedRecord?.id === updated.id) setSelectedRecord(updated);
+      toast.success("实际盈亏已更新");
+    } catch {
+      toast.error("更新失败，请重试");
+    }
+  };
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -178,6 +193,7 @@ export default function HistoryPage() {
                 onSelect={() => setSelectedRecord(selectedRecord?.id === record.id ? null : record)}
                 onDelete={(e) => handleDelete(record.id, e)}
                 onImageClick={(src) => setLightboxSrc(src)}
+                onUpdatePnl={(pnl) => handleUpdatePnl(record, pnl)}
               />
             ))}
           </div>
@@ -220,19 +236,48 @@ export default function HistoryPage() {
 // ─── Record Row ───────────────────────────────────────────────────────────────
 
 function RecordRow({
-  record, isSelected, onSelect, onDelete, onImageClick,
+  record, isSelected, onSelect, onDelete, onImageClick, onUpdatePnl,
 }: {
   record: AnalysisRecord;
   isSelected: boolean;
   onSelect: () => void;
   onDelete: (e: React.MouseEvent) => void;
   onImageClick: (src: string) => void;
+  onUpdatePnl: (pnl: number | undefined) => Promise<void>;
 }) {
+  const [editing, setEditing] = useState(false);
+  const [pnlInput, setPnlInput] = useState("");
+  const [saving, setSaving] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const startEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setPnlInput(record.tradeRecord?.actualPnl !== undefined ? String(record.tradeRecord.actualPnl) : "");
+    setEditing(true);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
+  const handleSavePnl = async (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    setSaving(true);
+    const val = pnlInput.trim() === "" ? undefined : parseFloat(pnlInput);
+    await onUpdatePnl(isNaN(val as number) ? undefined : val);
+    setSaving(false);
+    setEditing(false);
+  };
+
   const colorClass = getVerdictColor(record.verdict.signal);
   const date = new Date(record.date);
   const isBull = record.verdict.signal.includes("bullish");
   const isBear = record.verdict.signal.includes("bearish");
   const isMixed = record.verdict.signal === "mixed";
+  const pnl = record.tradeRecord?.actualPnl;
+  const hasTrade = record.tradeRecord && (
+    record.tradeRecord.entryPrice !== undefined ||
+    record.tradeRecord.takeProfit !== undefined ||
+    record.tradeRecord.stopLoss !== undefined ||
+    record.tradeRecord.actualPnl !== undefined
+  );
 
   const borderBg = isBull
     ? "border-emerald-500/20 bg-emerald-500/5"
@@ -300,6 +345,53 @@ function RecordRow({
           {date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}
         </div>
 
+        {/* PnL + Edit */}
+        <div className="flex items-center gap-2 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+          {editing ? (
+            <div className="flex items-center gap-1">
+              <input
+                ref={inputRef}
+                type="number"
+                step="any"
+                value={pnlInput}
+                onChange={(e) => setPnlInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") handleSavePnl(e); if (e.key === "Escape") setEditing(false); }}
+                placeholder="实际盈亏"
+                className="w-24 h-7 px-2 rounded-lg border border-teal-500/40 bg-slate-800 text-teal-300 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-teal-500/50"
+              />
+              <button
+                onClick={handleSavePnl}
+                disabled={saving}
+                className="h-7 w-7 flex items-center justify-center rounded-lg bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 transition-colors disabled:opacity-50"
+              >
+                <Check size={12} />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setEditing(false); }}
+                className="h-7 w-7 flex items-center justify-center rounded-lg hover:bg-slate-700 text-slate-500 hover:text-slate-300 transition-colors"
+              >
+                <X size={12} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              {pnl !== undefined && (
+                <span className={`text-xs font-bold font-mono ${pnl >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                  {pnl >= 0 ? "+" : ""}{pnl}
+                </span>
+              )}
+              <button
+                onClick={startEdit}
+                title="修改实际盈亏"
+                className="h-7 px-2 flex items-center gap-1 rounded-lg border border-white/8 hover:border-teal-500/30 text-slate-600 hover:text-teal-400 text-[11px] transition-colors"
+              >
+                <Pencil size={10} />
+                <span className="hidden sm:inline">修改</span>
+              </button>
+            </div>
+          )}
+        </div>
+
         {/* Delete */}
         <button
           onClick={onDelete}
@@ -353,6 +445,37 @@ function RecordRow({
             <div className="rounded-lg border border-white/8 bg-slate-900/40 p-3">
               <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">交易备注</span>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">{record.notes}</p>
+            </div>
+          )}
+          {hasTrade && (
+            <div className="rounded-lg border border-teal-500/20 bg-teal-500/5 p-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-bold text-teal-500/70 uppercase tracking-wider">交易记录</span>
+                {record.tradeRecord?.status && (
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                    record.tradeRecord.status === "closed"
+                      ? "text-teal-400 border-teal-500/30 bg-teal-500/10"
+                      : "text-amber-400 border-amber-500/30 bg-amber-500/10"
+                  }`}>
+                    {record.tradeRecord.status === "closed" ? "已完结" : "进行中"}
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-4 gap-2 text-center">
+                {[
+                  { label: "入场价位", val: record.tradeRecord?.entryPrice, color: "text-slate-200" },
+                  { label: "止盈 TP",  val: record.tradeRecord?.takeProfit,  color: "text-slate-200" },
+                  { label: "止损 SL",  val: record.tradeRecord?.stopLoss,   color: "text-red-400" },
+                  { label: "实际盈亏", val: record.tradeRecord?.actualPnl,  color: record.tradeRecord?.actualPnl !== undefined && record.tradeRecord.actualPnl >= 0 ? "text-emerald-400" : "text-red-400" },
+                ].map(({ label, val, color }) => (
+                  <div key={label} className="rounded-lg bg-slate-900/50 p-2">
+                    <div className="text-[10px] text-slate-600 mb-1">{label}</div>
+                    <div className={`text-xs font-bold font-mono ${color}`}>
+                      {val !== undefined ? (label === "实际盈亏" && val >= 0 ? `+${val}` : String(val)) : "—"}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
