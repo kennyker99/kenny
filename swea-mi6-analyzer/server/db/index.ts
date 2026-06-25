@@ -4,14 +4,15 @@ import * as schema from "./schema.js";
 
 const { Pool } = pg;
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is required");
-}
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
-});
-
-export const db = drizzle(pool, { schema });
+export let db: ReturnType<typeof drizzle> | null = null;
 export { schema };
+
+if (process.env.DATABASE_URL) {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  });
+  db = drizzle(pool, { schema });
+} else {
+  console.warn("DATABASE_URL not set — database features disabled");
+}

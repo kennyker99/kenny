@@ -9,7 +9,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function runMigrations() {
   if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is required");
+    console.log("DATABASE_URL not set — skipping migrations");
+    return;
   }
 
   const pool = new Pool({
@@ -18,7 +19,10 @@ async function runMigrations() {
   });
 
   const db = drizzle(pool);
-  await migrate(db, { migrationsFolder: path.resolve(__dirname, "../../drizzle") });
+  // In production dist/migrate.js → __dirname is dist/, drizzle/ is copied there during build
+  const migrationsFolder = path.resolve(__dirname, "drizzle");
+  console.log("Running migrations from:", migrationsFolder);
+  await migrate(db, { migrationsFolder });
   console.log("Migrations complete");
   await pool.end();
 }
