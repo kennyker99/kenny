@@ -52,17 +52,23 @@ export async function apiGetRecord(id: string): Promise<AnalysisRecord | undefin
   return rowToRecord(await res.json());
 }
 
+// MySQL/MariaDB may return json columns as strings; parse defensively
+function parseJson<T>(v: unknown): T {
+  if (v == null) return v as T;
+  if (typeof v === "string") return JSON.parse(v) as T;
+  return v as T;
+}
+
 function rowToRecord(row: Record<string, unknown>): AnalysisRecord {
   return {
     id:          row.id as string,
     pair:        row.pair as string,
     timeframe:   row.timeframe as string,
     date:        row.date as string,
-    indicators:  row.indicators as AnalysisRecord["indicators"],
-    verdict:     row.verdict as AnalysisRecord["verdict"],
-    // Drizzle returns camelCase keys matching the schema property names
+    indicators:  parseJson<AnalysisRecord["indicators"]>(row.indicators),
+    verdict:     parseJson<AnalysisRecord["verdict"]>(row.verdict),
     chartImage:  (row.chartImage ?? row.chart_image) as string | undefined,
     notes:       row.notes as string | undefined,
-    tradeRecord: (row.tradeRecord ?? row.trade_record) as AnalysisRecord["tradeRecord"] | undefined,
+    tradeRecord: parseJson<AnalysisRecord["tradeRecord"]>(row.tradeRecord ?? row.trade_record),
   };
 }

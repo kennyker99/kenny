@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/index.js && esbuild server/db/migrate.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/migrate.js && cp -r drizzle dist/drizzle",
+    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/index.js && esbuild server/db/migrate.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/migrate.js && rm -rf dist/drizzle && cp -r drizzle dist/drizzle",
     "start": "node dist/migrate.js && NODE_ENV=production node dist/index.js",
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
