@@ -77,13 +77,13 @@ export default function AnalyzerPage() {
       verdict,
       chartImage,
       notes: notes.trim() || undefined,
-      tradeRecord: (tradeRecord.entryPrice || tradeRecord.takeProfit || tradeRecord.stopLoss || tradeRecord.actualPnl) ? tradeRecord : undefined,
+      tradeRecord: (tradeRecord.entryPrice != null || tradeRecord.takeProfit != null || tradeRecord.stopLoss != null || tradeRecord.actualPnl != null) ? tradeRecord : undefined,
     };
     try {
       await apiSaveRecord(record);
       toast.success(`已保存 ${activePair} ${timeframe} 分析记录`);
-    } catch {
-      toast.error("保存失败，请重试");
+    } catch (err) {
+      toast.error(`保存失败: ${err instanceof Error ? err.message : "请重试"}`);
     }
   };
 
