@@ -3,7 +3,7 @@ import { generateShareImage } from "@/lib/generateShareImage";
 import {
   Search, Trash2, TrendingUp, TrendingDown, Minus,
   Calendar, Clock, X, ZoomIn, FileText, BarChart2, Pencil,
-  ImagePlus, Share2, Download,
+  ImagePlus, Share2, Download, RefreshCw,
 } from "lucide-react";
 import {
   getVerdictColor, TIMEFRAMES, INDICATOR_DEFINITIONS,
@@ -37,10 +37,17 @@ export default function HistoryPage() {
   const [editingRecord, setEditingRecord] = useState<AnalysisRecord | null>(null);
   const [sharingRecord, setSharingRecord] = useState<AnalysisRecord | null>(null);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    apiLoadRecords().then(setRecords).catch(() => toast.error("加载记录失败"));
-  }, []);
+  const loadRecords = () => {
+    setRefreshing(true);
+    apiLoadRecords()
+      .then(setRecords)
+      .catch(() => toast.error("加载记录失败"))
+      .finally(() => setRefreshing(false));
+  };
+
+  useEffect(() => { loadRecords(); }, []);
 
   const handleUpdate = async (updated: AnalysisRecord) => {
     try {
@@ -114,6 +121,10 @@ export default function HistoryPage() {
                 ].map(([v,l]) => <option key={v} value={v}>{l}</option>)}
               </select>
               <span className="text-[11px] text-slate-600 font-mono self-center px-1">{filtered.length} / {records.length} 条</span>
+              <button onClick={loadRecords} disabled={refreshing}
+                className="flex items-center gap-1 h-8 px-2.5 rounded-lg border border-white/10 bg-slate-800 text-slate-500 hover:text-slate-300 hover:bg-slate-700 text-[11px] transition-colors disabled:opacity-40 ml-auto">
+                <RefreshCw size={11} className={refreshing ? "animate-spin" : ""} /><span className="hidden sm:inline">刷新</span>
+              </button>
             </div>
           )}
         </div>

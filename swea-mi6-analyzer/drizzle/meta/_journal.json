@@ -16,5 +16,12 @@
       "tag": "0001_add_trade_record",
       "breakpoints": true
     }
+    ,{
+      "idx": 2,
+      "version": "5",
+      "when": 1782600000000,
+      "tag": "0002_mediumtext_images",
+      "breakpoints": true
+    }
   ]
 }
