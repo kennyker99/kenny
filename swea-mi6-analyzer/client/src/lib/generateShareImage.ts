@@ -38,9 +38,10 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    // Only set crossOrigin for non-data URLs to avoid CORS issues with blob/data URIs
+    if (!src.startsWith("data:")) img.crossOrigin = "anonymous";
     img.onload = () => resolve(img);
-    img.onerror = reject;
+    img.onerror = () => reject(new Error("Image load failed"));
     img.src = src;
   });
 }
@@ -52,16 +53,13 @@ function truncate(ctx: CanvasRenderingContext2D, text: string, maxW: number): st
   return t + "…";
 }
 
-export async function generateShareImage(record: AnalysisRecord): Promise<string> {
-  const canvas = document.createElement("canvas");
-  canvas.width = W;
-  canvas.height = H;
+async function drawCard(canvas: HTMLCanvasElement, record: AnalysisRecord) {
   const ctx = canvas.getContext("2d")!;
 
   const isBull = record.verdict.signal.includes("bullish");
   const isBear = record.verdict.signal.includes("bearish");
   const accent = isBull ? "#10b981" : isBear ? "#ef4444" : "#f59e0b";
-  const accentAlpha = isBull ? "rgba(16,185,129," : isBear ? "rgba(239,68,68," : "rgba(245,158,11,";
+  const accentRgb = isBull ? "16,185,129" : isBear ? "239,68,68" : "245,158,11";
 
   // ── Background ──────────────────────────────────────────────────────────────
   const bgGrad = ctx.createLinearGradient(0, 0, W * 0.5, H);
@@ -80,14 +78,13 @@ export async function generateShareImage(record: AnalysisRecord): Promise<string
   // Top accent bar
   const topGrad = ctx.createLinearGradient(0, 0, W * 0.6, 0);
   topGrad.addColorStop(0, accent);
-  topGrad.addColorStop(1, "transparent");
+  topGrad.addColorStop(1, `rgba(${accentRgb},0)`);
   ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, W, 6);
 
   let curY = 80;
 
   // ── Header ──────────────────────────────────────────────────────────────────
-  // M6 badge
   ctx.fillStyle = "rgba(255,255,255,0.06)";
   roundRect(ctx, 80, curY, 60, 60, 14); ctx.fill();
   ctx.strokeStyle = "rgba(255,255,255,0.12)"; ctx.lineWidth = 1.5;
@@ -111,7 +108,6 @@ export async function generateShareImage(record: AnalysisRecord): Promise<string
   ctx.textAlign = "right";
   ctx.fillText(dateStr, W - 80, curY + 38);
   ctx.textAlign = "left";
-
   curY += 96;
 
   // ── Pair + timeframe ────────────────────────────────────────────────────────
@@ -130,20 +126,18 @@ export async function generateShareImage(record: AnalysisRecord): Promise<string
   ctx.textAlign = "center";
   ctx.fillText(record.timeframe, tfX + 55, curY + 76);
   ctx.textAlign = "left";
-
   curY += 128;
 
   // ── Signal verdict ──────────────────────────────────────────────────────────
   const sigText = SIGNAL_LABELS[record.verdict.signal] || "";
   ctx.font = "bold 56px Arial, sans-serif";
   const sigW = ctx.measureText(sigText).width + 80;
-  ctx.fillStyle = accentAlpha + "0.12)";
+  ctx.fillStyle = `rgba(${accentRgb},0.12)`;
   roundRect(ctx, 80, curY, sigW, 94, 16); ctx.fill();
   ctx.strokeStyle = accent; ctx.lineWidth = 2;
   roundRect(ctx, 80, curY, sigW, 94, 16); ctx.stroke();
   ctx.fillStyle = accent;
   ctx.fillText(sigText, 120, curY + 64);
-
   curY += 120;
 
   // ── Chart image ─────────────────────────────────────────────────────────────
@@ -156,11 +150,10 @@ export async function generateShareImage(record: AnalysisRecord): Promise<string
       ctx.clip();
       ctx.drawImage(img, 80, curY, W - 160, imgH);
       ctx.restore();
-      // Subtle border
       ctx.strokeStyle = "rgba(255,255,255,0.1)"; ctx.lineWidth = 1.5;
       roundRect(ctx, 80, curY, W - 160, imgH, 20); ctx.stroke();
       curY += imgH + 52;
-    } catch { /* skip image on error */ }
+    } catch { /* skip image if load fails */ }
   }
 
   // ── Score boxes ─────────────────────────────────────────────────────────────
@@ -200,7 +193,7 @@ export async function generateShareImage(record: AnalysisRecord): Promise<string
   roundRect(ctx, 80, curY + 34, barW, 12, 6); ctx.fill();
   const fillGrad = ctx.createLinearGradient(80, 0, 80 + barW, 0);
   fillGrad.addColorStop(0, accent);
-  fillGrad.addColorStop(1, accentAlpha + "0.5)");
+  fillGrad.addColorStop(1, `rgba(${accentRgb},0.5)`);
   ctx.fillStyle = fillGrad;
   roundRect(ctx, 80, curY + 34, barW * record.verdict.confidence / 100, 12, 6); ctx.fill();
   curY += 80;
@@ -256,12 +249,10 @@ export async function generateShareImage(record: AnalysisRecord): Promise<string
     ctx.fillText("交易记录", 120, curY + 38);
 
     if (tr.status) {
-      const statusTxt = tr.status === "closed" ? "已完结" : "进行中";
-      const statusColor = tr.status === "closed" ? "#14b8a6" : "#f59e0b";
-      ctx.fillStyle = statusColor;
+      ctx.fillStyle = tr.status === "closed" ? "#14b8a6" : "#f59e0b";
       ctx.font = "bold 16px Arial, sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText(statusTxt, W - 120, curY + 38);
+      ctx.fillText(tr.status === "closed" ? "已完结" : "进行中", W - 120, curY + 38);
     }
 
     const fields = [
@@ -315,10 +306,24 @@ export async function generateShareImage(record: AnalysisRecord): Promise<string
 
   // Bottom accent bar
   const botGrad = ctx.createLinearGradient(W * 0.4, 0, W, 0);
-  botGrad.addColorStop(0, "transparent");
+  botGrad.addColorStop(0, `rgba(${accentRgb},0)`);
   botGrad.addColorStop(1, accent);
   ctx.fillStyle = botGrad;
   ctx.fillRect(0, H - 6, W, 6);
+}
 
-  return canvas.toDataURL("image/png");
+// Returns a blob URL (must be revoked by caller after use)
+export async function generateShareImage(record: AnalysisRecord): Promise<string> {
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+
+  await drawCard(canvas, record);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (!blob) { reject(new Error("Canvas toBlob failed")); return; }
+      resolve(URL.createObjectURL(blob));
+    }, "image/png");
+  });
 }

@@ -509,15 +509,18 @@ function ShareModal({ record, onClose }: { record: AnalysisRecord; onClose: () =
   const handleDownload = async () => {
     setExporting(true);
     try {
-      const dataUrl = await generateShareImage(record);
+      const blobUrl = await generateShareImage(record);
       const link = document.createElement("a");
       link.download = `MI6_${record.pair}_${record.timeframe}_${new Date(record.date).toLocaleDateString("zh-CN").replace(/\//g, "-")}.png`;
-      link.href = dataUrl;
+      link.href = blobUrl;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
       toast.success("图片已下载，可直接分享至各社群");
     } catch (e) {
       console.error(e);
-      toast.error("导出失败，请截图保存");
+      toast.error(`导出失败: ${e instanceof Error ? e.message : "请截图保存"}`);
     } finally {
       setExporting(false);
     }
