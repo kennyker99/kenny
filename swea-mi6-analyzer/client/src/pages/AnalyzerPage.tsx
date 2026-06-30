@@ -48,6 +48,7 @@ export default function AnalyzerPage() {
   const [chartLightbox, setChartLightbox] = useState(false);
   const chartFileRef = useRef<HTMLInputElement>(null);
   const [tradeRecord, setTradeRecord] = useState<TradeRecord>({ status: "open" });
+  const [pnlRaw, setPnlRaw] = useState("");
 
   const activePair = showCustomPair && customPair ? customPair.toUpperCase() : pair;
   const verdict = calculateVerdict(indicators);
@@ -64,6 +65,7 @@ export default function AnalyzerPage() {
     setNotes("");
     setChartImage(undefined);
     setTradeRecord({ status: "open" });
+    setPnlRaw("");
     toast.info("已重置所有指标");
   };
 
@@ -295,36 +297,52 @@ export default function AnalyzerPage() {
                 </div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {([
-                  { key: "entryPrice", label: "入场价位", placeholder: "0.00000" },
-                  { key: "takeProfit", label: "止盈 (TP)", placeholder: "0.00000" },
-                  { key: "stopLoss",   label: "止损 (SL)", placeholder: "0.00000" },
-                  { key: "actualPnl",  label: "实际盈亏",  placeholder: "+0.00 / -0.00" },
-                ] as const).map(({ key, label, placeholder }) => {
-                  const pnlColor = key === "actualPnl"
-                    ? (tradeRecord.actualPnl != null && tradeRecord.actualPnl < 0
-                        ? "text-red-400 border-red-500/20 focus:ring-red-500/30"
-                        : "text-emerald-400 border-emerald-500/20 focus:ring-emerald-500/30")
-                    : null;
+                {(["entryPrice", "takeProfit", "stopLoss"] as const).map((key) => {
+                  const meta = {
+                    entryPrice: { label: "入场价位", placeholder: "0.00000" },
+                    takeProfit: { label: "止盈 (TP)", placeholder: "0.00000" },
+                    stopLoss:   { label: "止损 (SL)", placeholder: "0.00000" },
+                  }[key];
                   return (
-                  <div key={key}>
-                    <label className="block text-[10px] text-slate-500 mb-1.5">{label}</label>
-                    <input
-                      type="number"
-                      step="any"
-                      value={tradeRecord[key] ?? ""}
-                      onChange={(e) => setTradeRecord((p) => ({
-                        ...p,
-                        [key]: e.target.value === "" ? undefined : parseFloat(e.target.value),
-                      }))}
-                      placeholder={placeholder}
-                      className={`w-full px-3 py-2 rounded-lg border bg-slate-800/60 text-sm font-mono focus:outline-none focus:ring-1 transition-colors placeholder:text-slate-700
-                        ${pnlColor ?? (key === "stopLoss" ? "text-red-400 border-red-500/20 focus:ring-red-500/30" : "text-slate-200 border-white/8 focus:ring-teal-500/30")}
-                      `}
-                    />
-                  </div>
+                    <div key={key}>
+                      <label className="block text-[10px] text-slate-500 mb-1.5">{meta.label}</label>
+                      <input
+                        type="number" step="any"
+                        value={tradeRecord[key] ?? ""}
+                        onChange={(e) => setTradeRecord((p) => ({
+                          ...p,
+                          [key]: e.target.value === "" ? undefined : parseFloat(e.target.value),
+                        }))}
+                        placeholder={meta.placeholder}
+                        className={`w-full px-3 py-2 rounded-lg border bg-slate-800/60 text-sm font-mono focus:outline-none focus:ring-1 transition-colors placeholder:text-slate-700
+                          ${key === "stopLoss" ? "text-red-400 border-red-500/20 focus:ring-red-500/30" : "text-slate-200 border-white/8 focus:ring-teal-500/30"}
+                        `}
+                      />
+                    </div>
                   );
                 })}
+                {/* 实际盈亏 — tracked as raw string so "-" mid-type shows red immediately */}
+                <div>
+                  <label className="block text-[10px] text-slate-500 mb-1.5">实际盈亏</label>
+                  <input
+                    type="number" step="any"
+                    value={pnlRaw}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      setPnlRaw(raw);
+                      setTradeRecord((p) => ({
+                        ...p,
+                        actualPnl: raw === "" ? undefined : parseFloat(raw),
+                      }));
+                    }}
+                    placeholder="+0.00 / -0.00"
+                    className={`w-full px-3 py-2 rounded-lg border bg-slate-800/60 text-sm font-mono focus:outline-none focus:ring-1 transition-colors placeholder:text-slate-700
+                      ${pnlRaw.startsWith("-")
+                        ? "text-red-400 border-red-500/20 focus:ring-red-500/30"
+                        : "text-teal-400 border-teal-500/20 focus:ring-teal-500/30"}
+                    `}
+                  />
+                </div>
               </div>
             </div>
           </div>

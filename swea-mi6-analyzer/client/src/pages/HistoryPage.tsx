@@ -485,7 +485,6 @@ function EditRecordModal({ record, onClose, onSave }: {
                 { key: "entryPrice" as const, label: "入场价位", color: "" },
                 { key: "takeProfit"  as const, label: "止盈 (TP)", color: "" },
                 { key: "stopLoss"   as const, label: "止损 (SL)", color: "text-red-400" },
-                { key: "actualPnl"  as const, label: "实际盈亏",  color: "text-emerald-400" },
               ]).map(({ key, label, color }) => (
                 <div key={key}>
                   <label className="block text-[10px] text-slate-500 mb-1.5">{label}</label>
@@ -494,6 +493,20 @@ function EditRecordModal({ record, onClose, onSave }: {
                     className={`w-full px-3 py-2 rounded-lg border border-white/8 bg-slate-800/60 text-sm font-mono focus:outline-none focus:ring-1 focus:ring-teal-500/30 placeholder:text-slate-700 ${color || "text-slate-200"}`} />
                 </div>
               ))}
+              {/* 实际盈亏 — dynamic color: teal=盈利, red=亏损 */}
+              <div>
+                <label className="block text-[10px] text-slate-500 mb-1.5">实际盈亏</label>
+                <input type="number" step="any"
+                  value={trade.actualPnl !== undefined ? String(trade.actualPnl) : ""}
+                  onChange={(e) => setTradeField("actualPnl", e.target.value)}
+                  placeholder="+0.00 / -0.00"
+                  className={`w-full px-3 py-2 rounded-lg border bg-slate-800/60 text-sm font-mono focus:outline-none focus:ring-1 transition-colors placeholder:text-slate-700
+                    ${(trade.actualPnl ?? 0) < 0
+                      ? "text-red-400 border-red-500/20 focus:ring-red-500/30"
+                      : "text-teal-400 border-teal-500/20 focus:ring-teal-500/30"}
+                  `}
+                />
+              </div>
             </div>
           </div>
 
